@@ -1,0 +1,196 @@
+- Class: meta
+  Course: Introducao a Linguagem R
+  Lesson: Primeiros Passos
+  Author: Diogo B. Provete
+  Type: Standard
+  Organization: PPGEC/UFMS
+  Version: 2.4.5
+
+- Class: text
+  Output: "Bem-vindo(a)! Esta lição acompanha a aula 01 da disciplina Introdução à Linguagem R. Você vai digitar comandos diretamente no console e eu vou conferindo cada resposta. Leva uns 20 minutos."
+
+- Class: text
+  Output: "Quando aparecer o sinal '>' e ... no fim do texto, é a sua vez de digitar. Quando aparecer só '...', aperte Enter para seguir. Se travar, digite skip() para pular uma pergunta, ou bye() para sair e continuar depois de onde parou."
+
+- Class: text
+  Output: "Vamos começar pelo mais simples: o R é, antes de tudo, uma calculadora."
+
+- Class: cmd_question
+  Output: "Digite 2 + 3 e aperte Enter."
+  CorrectAnswer: 2 + 3
+  AnswerTests: omnitest(correctExpr='2 + 3', correctVal=5)
+  Hint: "Digite exatamente 2 + 3 e aperte Enter."
+
+- Class: cmd_question
+  Output: "Potências usam o acento circunflexo. Calcule 2 elevado a 10."
+  CorrectAnswer: 2^10
+  AnswerTests: omnitest(correctExpr='2^10', correctVal=1024)
+  Hint: "Digite 2^10."
+
+- Class: cmd_question
+  Output: "Agora use a sua primeira função. Funções têm nome e parênteses, e o que vai dentro dos parênteses é o argumento. A raiz quadrada é sqrt(). Calcule a raiz quadrada de 144."
+  CorrectAnswer: sqrt(144)
+  AnswerTests: omnitest(correctExpr='sqrt(144)', correctVal=12)
+  Hint: "Digite sqrt(144)."
+
+- Class: text
+  Output: "Dois operadores aparecem muito em programação: %% devolve o resto da divisão e %/% devolve a parte inteira. Por exemplo, 5 %/% 2 dá 2."
+
+- Class: cmd_question
+  Output: "Qual é o resto da divisão de 5 por 2? Use o operador %%."
+  CorrectAnswer: 5 %% 2
+  AnswerTests: omnitest(correctExpr='5 %% 2', correctVal=1)
+  Hint: "Digite 5 %% 2."
+
+- Class: text
+  Output: "Até aqui o R calculou e esqueceu. Para guardar um resultado, usamos a atribuição: a seta <- (sinal de menor seguido de hífen). O que está à direita é guardado no nome que está à esquerda. No RStudio, o atalho é Alt + - (Option + - no Mac)."
+
+- Class: cmd_question
+  Output: "Crie um objeto chamado b contendo os números de 1 a 5. Use a função c(), que combina valores: b <- c(1, 2, 3, 4, 5)"
+  CorrectAnswer: b <- c(1, 2, 3, 4, 5)
+  AnswerTests: expr_creates_var('b'); var_vale('b', '1:5')
+  Hint: "Digite b <- c(1, 2, 3, 4, 5)."
+
+- Class: text
+  Output: "Repare que nada foi impresso. A atribuição guarda em silêncio. O objeto b agora existe na memória, e você pode usá-lo em outras contas."
+
+- Class: cmd_question
+  Output: "Calcule a média de b com a função mean() e guarde o resultado num objeto chamado minha.media."
+  CorrectAnswer: minha.media <- mean(b)
+  AnswerTests: expr_creates_var('minha.media'); expr_uses_func('mean'); var_vale('minha.media', '3')
+  Hint: "Digite minha.media <- mean(b)."
+
+- Class: cmd_question
+  Output: "Para ver o que está guardado num objeto, basta digitar o nome dele. Veja o conteúdo de minha.media."
+  CorrectAnswer: minha.media
+  AnswerTests: omnitest(correctExpr='minha.media', correctVal=3)
+  Hint: "Digite só minha.media e aperte Enter."
+
+- Class: text
+  Output: "Agora um cuidado importante. Um vetor só guarda um tipo de dado. Se você misturar tipos, o R não dá erro: ele converte tudo para o tipo mais geral, em silêncio. Isso se chama coerção."
+
+- Class: cmd_question
+  Output: "Descubra a classe do vetor c(1, 2, \"tres\"), que mistura números e texto. Use a função class()."
+  CorrectAnswer: class(c(1, 2, "tres"))
+  AnswerTests: omnitest(correctExpr='class(c(1, 2, "tres"))', correctVal='character')
+  Hint: "Digite class(c(1, 2, \"tres\")). As aspas em volta de tres são necessárias."
+
+- Class: mult_question
+  Output: "E o vetor c(TRUE, FALSE, 1), que mistura valores lógicos com um número? O que o R devolve?"
+  AnswerChoices: 1 0 1 (tudo virou número);TRUE FALSE TRUE (tudo virou lógico);Uma mensagem de erro
+  CorrectAnswer: 1 0 1 (tudo virou número)
+  AnswerTests: omnitest(correctVal='1 0 1 (tudo virou número)')
+  Hint: "Lógico é mais restrito que número: TRUE vale 1 e FALSE vale 0. Na dúvida, rode o comando depois da lição."
+
+- Class: text
+  Output: "Hora de ler os dados da disciplina: limites térmicos de 225 anuros de 5 espécies, medidos em 6 altitudes na Mata Atlântica (Bovo et al. 2023). Todas as aulas práticas voltam a esse arquivo."
+
+- Class: text
+  Output: "No seu Projeto do RStudio você vai escrever read.csv(\"dados/anuros_altitude.csv\"), com o caminho relativo à pasta do projeto e sem setwd(). Aqui dentro do swirl eu já guardei o caminho completo do arquivo num objeto chamado arquivo."
+
+- Class: cmd_question
+  Output: "Leia o arquivo com a função read.csv() e guarde o resultado num objeto chamado dados."
+  CorrectAnswer: dados <- read.csv(arquivo)
+  AnswerTests: expr_creates_var('dados'); expr_uses_func('read.csv'); dados_ok()
+  Hint: "Digite dados <- read.csv(arquivo). Sem aspas em arquivo: é um objeto, não um texto."
+
+- Class: text
+  Output: "Antes de qualquer análise, quatro comandos: head(), dim(), str() e summary(). Eles mostram se o arquivo foi lido do jeito que você imagina. Vamos a eles."
+
+- Class: cmd_question
+  Output: "Veja as primeiras linhas de dados com head()."
+  CorrectAnswer: head(dados)
+  AnswerTests: omnitest(correctExpr='head(dados)')
+  Hint: "Digite head(dados)."
+
+- Class: cmd_question
+  Output: "Agora veja as dimensões da tabela com dim()."
+  CorrectAnswer: dim(dados)
+  AnswerTests: omnitest(correctExpr='dim(dados)')
+  Hint: "Digite dim(dados)."
+
+- Class: mult_question
+  Output: "O primeiro número de dim() é o de linhas, o segundo é o de colunas. Quantas colunas (variáveis) tem o arquivo?"
+  AnswerChoices: 26;225;5
+  CorrectAnswer: 26
+  AnswerTests: omnitest(correctVal='26')
+  Hint: "É o segundo número que dim(dados) mostrou."
+
+- Class: cmd_question
+  Output: "Veja a estrutura do objeto com str(). Ela mostra o tipo de cada coluna."
+  CorrectAnswer: str(dados)
+  AnswerTests: omnitest(correctExpr='str(dados)')
+  Hint: "Digite str(dados)."
+
+- Class: mult_question
+  Output: "Na saída de str(), qual é o tipo da coluna Species?"
+  AnswerChoices: chr (texto);num (número);logi (lógico)
+  CorrectAnswer: chr (texto)
+  AnswerTests: omnitest(correctVal='chr (texto)')
+  Hint: "Procure a linha que começa com $ Species e olhe a abreviação logo depois dos dois-pontos."
+
+- Class: text
+  Output: "Para pegar uma coluna de uma tabela, usamos o cifrão: dados$CTmax é a coluna CTmax (tolerância térmica máxima, em graus Celsius)."
+
+- Class: cmd_question
+  Output: "Use summary() para resumir a coluna CTmax."
+  CorrectAnswer: summary(dados$CTmax)
+  AnswerTests: omnitest(correctExpr='summary(dados$CTmax)')
+  Hint: "Digite summary(dados$CTmax)."
+
+- Class: mult_question
+  Output: "Olhe a última informação do resumo. Quantos animais não têm CTmax medido (NA)?"
+  AnswerChoices: 35;0;225
+  CorrectAnswer: 35
+  AnswerTests: omnitest(correctVal='35')
+  Hint: "É o número abaixo de NA's no resumo."
+
+- Class: cmd_question
+  Output: "Para contar quantas vezes cada valor aparece numa coluna, use table(). Conte os indivíduos por espécie na coluna Species."
+  CorrectAnswer: table(dados$Species)
+  AnswerTests: omnitest(correctExpr='table(dados$Species)')
+  Hint: "Digite table(dados$Species)."
+
+- Class: cmd_question
+  Output: "Agora conte por sexo, na coluna Sex. Atenção: por padrão table() esconde os NA. Acrescente o argumento useNA = \"ifany\" para mostrá-los."
+  CorrectAnswer: table(dados$Sex, useNA = "ifany")
+  AnswerTests: expr_uses_func('table'); tabela_sexo_com_na()
+  Hint: "Digite table(dados$Sex, useNA = \"ifany\")."
+
+- Class: mult_question
+  Output: "O que essa tabela revela sobre os dados?"
+  AnswerChoices: Quase metade dos animais não tem sexo registrado;Há mais fêmeas do que machos;Todos os animais têm sexo registrado
+  CorrectAnswer: Quase metade dos animais não tem sexo registrado
+  AnswerTests: omnitest(correctVal='Quase metade dos animais não tem sexo registrado')
+  Hint: "Compare o número em <NA> com o total de 225."
+
+- Class: cmd_question
+  Output: "Para ver os NA de todas as colunas de uma vez, combine duas funções: is.na() marca cada célula vazia e colSums() soma por coluna. Digite colSums(is.na(dados))."
+  CorrectAnswer: colSums(is.na(dados))
+  AnswerTests: omnitest(correctExpr='colSums(is.na(dados))')
+  Hint: "Digite colSums(is.na(dados))."
+
+- Class: text
+  Output: "Esses NA são ausências reais: animais que não se recuperaram do ensaio, ou medidas que não foram feitas. Voltaremos a eles nas próximas aulas."
+
+- Class: text
+  Output: "Toda função tem uma página de ajuda. Basta digitar um ponto de interrogação antes do nome, por exemplo ?read.csv. Depois da lição, abra a ajuda de mean e procure o argumento na.rm."
+
+- Class: text
+  Output: "Por fim, pacotes. install.packages(\"dplyr\") baixa o pacote para o seu computador. Isso se faz uma vez só por máquina, no console. Já library(dplyr) carrega o pacote e precisa estar no topo de todo script que o usa."
+
+- Class: mult_question
+  Output: "Onde deve ficar a linha install.packages(\"dplyr\")?"
+  AnswerChoices: No console, rodada uma vez por computador;No topo de todo script;Em nenhum lugar, o R já vem com todos os pacotes
+  CorrectAnswer: No console, rodada uma vez por computador
+  AnswerTests: omnitest(correctVal='No console, rodada uma vez por computador')
+  Hint: "Se ficar no script, o pacote é baixado de novo toda vez que o script roda."
+
+- Class: cmd_question
+  Output: "Última conferência. O operador %in% pergunta se um valor está dentro de um vetor. Confira se \"CTmax\" está entre os nomes das colunas: \"CTmax\" %in% names(dados)"
+  CorrectAnswer: '"CTmax" %in% names(dados)'
+  AnswerTests: omnitest(correctExpr='"CTmax" %in% names(dados)')
+  Hint: "Digite \"CTmax\" %in% names(dados)."
+
+- Class: text
+  Output: "Pronto, a aula 01 está fechada! Você usou o R como calculadora, guardou objetos, viu a coerção, leu e inspecionou os dados da disciplina. Na aula 02 vamos organizar esses dados seguindo boas práticas de curadoria."
