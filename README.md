@@ -42,3 +42,19 @@ uninstall_course("Introducao_a_Linguagem_R")   # se já estiver instalado
 install_course_directory("~/GitHub/Introducao_a_Linguagem_R")
 swirl()
 ```
+
+## Licença
+
+O conteúdo deste repositório (lições, textos e código) está sob a licença
+[Creative Commons Atribuição 4.0 Internacional (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/deed.pt-br).
+Texto completo em [`LICENSE`](LICENSE). Ao reutilizar ou adaptar, cite:
+Provete, D.B. *Introdução à Linguagem R — lições interativas no swirl*.
+<https://github.com/diogoprov/Introducao_a_Linguagem_R>
+
+O arquivo `anuros_altitude.csv` vem do material suplementar de
+Bovo, R.P.; Simon, M.N.; Provete, D.B.; Lyra, M.; Navas, C.A.; Andrade, D.V.
+(2023). Beyond Janzen's Hypothesis: How Amphibians That Climb Tropical
+Mountains Respond to Climate Variation. *Integrative Organismal Biology*
+5(1): obad009. <https://doi.org/10.1093/iob/obad009>. O artigo é de acesso
+aberto sob licença Creative Commons CC BY. O arquivo é redistribuído sem
+alterações de conteúdo e deve ser citado pela referência acima.
