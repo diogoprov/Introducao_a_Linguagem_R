@@ -20,10 +20,13 @@ Biology* 5: obad009).
 ```r
 install.packages("swirl")        # uma vez só
 library(swirl)
-select_language("portuguese")    # menus do swirl em português (uma vez só)
+select_language("portuguese", append_rprofile = TRUE)  # swirl em português (uma vez só)
 install_course_url("https://github.com/diogoprov/Introducao_a_Linguagem_R/zipball/main")
 swirl()
 ```
+
+O `append_rprofile = TRUE` grava a escolha no seu `.Rprofile`: sem ele, menus e
+mensagens de incentivo do swirl voltam para o inglês quando o R é reiniciado.
 
 Use `install_course_url()` com o endereço acima, e não `install_course_github()`:
 esta última monta o endereço com `http://` e pode falhar por tempo esgotado.
