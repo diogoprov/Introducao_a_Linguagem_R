@@ -1,0 +1,196 @@
+- Class: meta
+  Course: Introducao a Linguagem R
+  Lesson: Manuseio de Dados com dplyr
+  Author: Diogo B. Provete
+  Type: Standard
+  Organization: PPGEC/UFMS
+  Version: 2.4.5
+
+- Class: text
+  Output: "Bem-vindo(a) à lição da aula 04! Hoje você vai limpar os dados da disciplina com o dplyr, o pacote de manipulação de dados do tidyverse. É a mesma limpeza que o script da aula faz, e o resultado alimenta as aulas 05 e 06. Leva uns 25 minutos."
+
+- Class: text
+  Output: "Eu já li o arquivo para você: ele está no objeto bruto, exatamente como veio do material suplementar de Bovo et al. (2023)."
+
+- Class: cmd_question
+  Output: "Num script, a primeira coisa é carregar os pacotes. Carregue o dplyr com library()."
+  CorrectAnswer: library(dplyr)
+  AnswerTests: usa('library', 'require'); pacote_carregado('dplyr')
+  Hint: "Digite library(dplyr). Sem aspas também funciona."
+
+- Class: cmd_question
+  Output: "Veja os nomes das colunas de bruto com names()."
+  CorrectAnswer: names(bruto)
+  AnswerTests: omnitest(correctExpr='names(bruto)')
+  Hint: "Digite names(bruto)."
+
+- Class: text
+  Output: "Repare nos nomes: EWL_Ugcm2s1, Bodymass_g, Altitude_m. A unidade está grudada no nome, e há maiúsculas e minúsculas misturadas. Como vimos na aula 02, unidade é assunto dos metadados. Nomes curtos, em minúsculas e sem unidade são mais fáceis de digitar e de ler."
+
+- Class: text
+  Output: "Antes de mexer nos nomes, uma ferramenta nova: o pipe, escrito |> (barra vertical seguida de sinal de maior). Ele pega o que está à esquerda e entrega como primeiro argumento da função à direita. Ou seja, x |> f() é o mesmo que f(x). Leia o pipe como 'e então'."
+
+- Class: cmd_question
+  Output: "Conte as linhas de bruto usando o pipe: bruto |> nrow()"
+  CorrectAnswer: bruto |> nrow()
+  AnswerTests: usa('nrow'); valor_e(225)
+  Hint: "Digite bruto |> nrow(). São dois caracteres: a barra vertical | e o sinal de maior >."
+
+- Class: mult_question
+  Output: "Qual destas expressões faz exatamente o mesmo que bruto |> head()?"
+  AnswerChoices: head(bruto);bruto(head);head() |> bruto
+  CorrectAnswer: head(bruto)
+  AnswerTests: omnitest(correctVal='head(bruto)')
+  Hint: "O que está à esquerda do pipe vira o primeiro argumento da função à direita."
+
+- Class: text
+  Output: "Você vai encontrar muito código com outro pipe, o %>%, do pacote magrittr. É o antecessor do |> e faz a mesma coisa nos usos do dia a dia. O script da aula usa %>%. Nesta lição eu uso |>, que já vem no R desde a versão 4.1, mas aceito os dois. No RStudio, Ctrl + Shift + M (Cmd + Shift + M no Mac) digita o pipe para você."
+
+- Class: text
+  Output: "O pipe brilha quando encadeamos passos. Cada verbo do dplyr recebe uma tabela e devolve uma tabela, então dá para ligar um no outro: renomear, depois selecionar, depois filtrar, e assim por diante."
+
+- Class: text
+  Output: "Primeiro verbo: rename(). A sintaxe é rename(nome_novo = nome_antigo). Dá para renomear várias colunas de uma vez, separando por vírgulas."
+
+- Class: cmd_question
+  Output: "Crie o objeto anuros a partir de bruto, renomeando Species para especie, Sex para sexo, Mountain_Range para serra e Altitude_m para altitude: anuros <- bruto |> rename(especie = Species, sexo = Sex, serra = Mountain_Range, altitude = Altitude_m)"
+  CorrectAnswer: anuros <- bruto |> rename(especie = Species, sexo = Sex, serra = Mountain_Range, altitude = Altitude_m)
+  AnswerTests: usa('rename'); tabela_contem('anuros', 'especie,sexo,serra,altitude', 26)
+  Hint: "Digite anuros <- bruto |> rename(especie = Species, sexo = Sex, serra = Mountain_Range, altitude = Altitude_m). O nome novo vem à esquerda do sinal de igual."
+
+- Class: text
+  Output: "Segundo verbo: select(), que escolhe as colunas que ficam. O arquivo tem 26 colunas, mas hoje vamos usar poucas. Um truque: dentro de select() também dá para renomear, com a mesma sintaxe nome_novo = nome_antigo."
+
+- Class: cmd_question
+  Output: "Fique só com especie, sexo, serra, altitude e mais três colunas renomeadas na hora: CTmin como ctmin, CTmax como ctmax e BIO_5 como bio5. Guarde de novo em anuros: anuros <- anuros |> select(especie, sexo, serra, altitude, ctmin = CTmin, ctmax = CTmax, bio5 = BIO_5)"
+  CorrectAnswer: anuros <- anuros |> select(especie, sexo, serra, altitude, ctmin = CTmin, ctmax = CTmax, bio5 = BIO_5)
+  AnswerTests: usa('select'); tabela_com('anuros', 'especie,sexo,serra,altitude,ctmin,ctmax,bio5')
+  Hint: "Digite anuros <- anuros |> select(especie, sexo, serra, altitude, ctmin = CTmin, ctmax = CTmax, bio5 = BIO_5)."
+
+- Class: text
+  Output: "Repare que escrevemos anuros <- anuros |> ... Isso substitui o objeto antigo pelo novo. É prático, mas se errar é preciso refazer desde o começo. Por isso, num script, o passo a passo todo fica escrito, do read.csv() até o fim."
+
+- Class: cmd_question
+  Output: "O dplyr tem sua própria versão de str(), mais compacta: glimpse(). Use-a em anuros."
+  CorrectAnswer: glimpse(anuros)
+  AnswerTests: usa('glimpse', 'str')
+  Hint: "Digite glimpse(anuros)."
+
+- Class: mult_question
+  Output: "Na saída de glimpse(), de que tipo é a coluna especie?"
+  AnswerChoices: chr (texto);fct (fator);dbl (número)
+  CorrectAnswer: chr (texto)
+  AnswerTests: omnitest(correctVal='chr (texto)')
+  Hint: "Olhe a abreviação entre < > logo depois de $ especie."
+
+- Class: text
+  Output: "Espécie é uma variável categórica: um número fixo de categorias, que os modelos da aula 06 vão tratar como grupos. No R, isso é um fator. O verbo para criar ou modificar colunas é mutate(), com a sintaxe mutate(coluna = conta)."
+
+- Class: cmd_question
+  Output: "Transforme especie em fator: anuros <- anuros |> mutate(especie = factor(especie))"
+  CorrectAnswer: anuros <- anuros |> mutate(especie = factor(especie))
+  AnswerTests: usa('mutate', 'factor', 'as.factor'); coluna_fator('especie')
+  Hint: "Digite anuros <- anuros |> mutate(especie = factor(especie))."
+
+- Class: text
+  Output: "Agora um cuidado de curadoria. O arquivo original traz Tbr, a amplitude térmica, que é só ctmax - ctmin. Só que em 8 animais o valor gravado não bate com a conta: um deles tem ctmax 35.0 e ctmin 9.2, que dá 25.8, mas o arquivo traz 25.8195. Em vez de confiar numa coluna derivada, recalcule a partir das medidas."
+
+- Class: cmd_question
+  Output: "Crie a coluna amplitude, igual a ctmax - ctmin."
+  CorrectAnswer: anuros <- anuros |> mutate(amplitude = ctmax - ctmin)
+  AnswerTests: usa('mutate'); coluna_igual_a('amplitude', 'ctmax - ctmin')
+  Hint: "Digite anuros <- anuros |> mutate(amplitude = ctmax - ctmin). Não esqueça de guardar em anuros."
+
+- Class: cmd_question
+  Output: "Mais uma: a tolerância ao aquecimento, tol_aquec, é a diferença entre ctmax e a temperatura máxima do mês mais quente, bio5. Crie essa coluna."
+  CorrectAnswer: anuros <- anuros |> mutate(tol_aquec = ctmax - bio5)
+  AnswerTests: usa('mutate'); coluna_igual_a('tol_aquec', 'ctmax - bio5')
+  Hint: "Digite anuros <- anuros |> mutate(tol_aquec = ctmax - bio5)."
+
+- Class: text
+  Output: "Com a tabela arrumada, vamos fazer perguntas a ela. O verbo filter() mantém só as linhas que satisfazem uma condição. Para comparar, use dois sinais de igual: == pergunta 'é igual a?', enquanto um só = serve para dar nome a argumentos."
+
+- Class: cmd_question
+  Output: "Mostre só as linhas de Boana faber: anuros |> filter(especie == \"Boana faber\")"
+  CorrectAnswer: anuros |> filter(especie == "Boana faber")
+  AnswerTests: usa('filter', 'subset'); tabela_igual_a('dplyr::filter(anuros, especie == \"Boana faber\")')
+  Hint: "Digite anuros |> filter(especie == \"Boana faber\"). O nome da espécie vai entre aspas e com B maiúsculo."
+
+- Class: mult_question
+  Output: "E se alguém escrever filter(especie = \"Boana faber\"), com um sinal de igual só?"
+  AnswerChoices: O dplyr dá erro e sugere usar ==;Funciona igual;Ele troca todas as espécies para Boana faber
+  CorrectAnswer: O dplyr dá erro e sugere usar ==
+  AnswerTests: omnitest(correctVal='O dplyr dá erro e sugere usar ==')
+  Hint: "Um só = dá nome a um argumento, não compara nada. O dplyr percebe isso e avisa. Experimente depois da lição."
+
+- Class: cmd_question
+  Output: "Várias condições separadas por vírgula precisam ser todas verdadeiras. Mostre os animais de 1000 m ou mais que têm ctmax medido: anuros |> filter(altitude >= 1000, !is.na(ctmax))"
+  CorrectAnswer: anuros |> filter(altitude >= 1000, !is.na(ctmax))
+  AnswerTests: usa('filter', 'subset'); tabela_igual_a('dplyr::filter(anuros, altitude >= 1000, !is.na(ctmax))')
+  Hint: "Digite anuros |> filter(altitude >= 1000, !is.na(ctmax)). O ! quer dizer 'não': !is.na() é 'não está faltando'."
+
+- Class: cmd_question
+  Output: "Agora encadeie dois passos: filtre os animais sem sexo registrado e, então, conte as linhas. Use is.na(sexo) dentro de filter() e termine com nrow()."
+  CorrectAnswer: anuros |> filter(is.na(sexo)) |> nrow()
+  AnswerTests: usa('filter', 'subset'); valor_e(107)
+  Hint: "Digite anuros |> filter(is.na(sexo)) |> nrow()."
+
+- Class: text
+  Output: "O último par de verbos é o mais poderoso: group_by() divide a tabela em grupos e summarise() calcula um resumo para cada grupo. Essa estratégia se chama dividir, aplicar e combinar (split-apply-combine)."
+
+- Class: cmd_question
+  Output: "Calcule o ctmax médio de cada espécie: anuros |> group_by(especie) |> summarise(ctmax_med = mean(ctmax))"
+  CorrectAnswer: anuros |> group_by(especie) |> summarise(ctmax_med = mean(ctmax))
+  AnswerTests: usa('group_by'); usa('summarise', 'summarize')
+  Hint: "Digite anuros |> group_by(especie) |> summarise(ctmax_med = mean(ctmax))."
+
+- Class: mult_question
+  Output: "Todas as médias saíram NA. Por quê?"
+  AnswerChoices: Toda espécie tem ao menos um ctmax faltando, e mean() devolve NA quando há algum NA;O group_by() apagou a coluna ctmax;ctmax é texto e não dá para tirar média
+  CorrectAnswer: Toda espécie tem ao menos um ctmax faltando, e mean() devolve NA quando há algum NA
+  AnswerTests: omnitest(correctVal='Toda espécie tem ao menos um ctmax faltando, e mean() devolve NA quando há algum NA')
+  Hint: "Lembre dos 35 animais sem ctmax que você viu na aula 01."
+
+- Class: cmd_question
+  Output: "Refaça guardando o resultado em resumo. Desta vez, conte também quantos animais há em cada espécie com n(), e ignore os NA na média com na.rm = TRUE: resumo <- anuros |> group_by(especie) |> summarise(n = n(), ctmax_med = mean(ctmax, na.rm = TRUE))"
+  CorrectAnswer: resumo <- anuros |> group_by(especie) |> summarise(n = n(), ctmax_med = mean(ctmax, na.rm = TRUE))
+  AnswerTests: usa('group_by'); resumo_ok()
+  Hint: "Digite resumo <- anuros |> group_by(especie) |> summarise(n = n(), ctmax_med = mean(ctmax, na.rm = TRUE))."
+
+- Class: cmd_question
+  Output: "Veja o resumo digitando o nome dele."
+  CorrectAnswer: resumo
+  AnswerTests: omnitest(correctExpr='resumo')
+  Hint: "Digite resumo e aperte Enter."
+
+- Class: mult_question
+  Output: "Qual espécie tem o menor ctmax médio, ou seja, perde o reflexo de endireitamento a temperaturas mais baixas?"
+  AnswerChoices: Dendropsophus minutus;Boana faber;Rhinella icterica
+  CorrectAnswer: Dendropsophus minutus
+  AnswerTests: omnitest(correctVal='Dendropsophus minutus')
+  Hint: "Procure o menor valor na coluna ctmax_med."
+
+- Class: text
+  Output: "Para contagens simples, há um atalho: count(). Escrever count(serra, altitude) é o mesmo que group_by(serra, altitude) |> summarise(n = n())."
+
+- Class: cmd_question
+  Output: "Use count() para ver quantos animais há em cada combinação de serra e altitude."
+  CorrectAnswer: anuros |> count(serra, altitude)
+  AnswerTests: usa('count', 'summarise', 'summarize', 'table'); tabela_igual_a('dplyr::count(anuros, serra, altitude)')
+  Hint: "Digite anuros |> count(serra, altitude)."
+
+- Class: mult_question
+  Output: "O que essa tabela revela sobre o desenho amostral?"
+  AnswerChoices: Cada altitude foi amostrada em uma única serra;Todas as altitudes foram amostradas nas duas serras;Cada serra tem uma única altitude
+  CorrectAnswer: Cada altitude foi amostrada em uma única serra
+  AnswerTests: omnitest(correctVal='Cada altitude foi amostrada em uma única serra')
+  Hint: "Veja se algum valor de altitude aparece nas duas serras."
+
+- Class: text
+  Output: "Guarde isso: altitude e serra estão confundidas. Não dá para separar o efeito de uma do efeito da outra no mesmo modelo. Esse é o assunto da aula 06."
+
+- Class: text
+  Output: "No script da aula, o último passo grava a tabela limpa com write.csv(anuros, \"dados/processados/anuros_limpo.csv\", row.names = FALSE). É desse arquivo que as aulas 05 e 06 partem. Aqui no swirl não vou gravar nada no seu computador, mas lembre de rodar o script."
+
+- Class: text
+  Output: "Pronto! Você usou o pipe e os verbos principais do dplyr: rename(), select(), mutate(), filter(), group_by() com summarise() e count(). Com eles se faz a maior parte da limpeza de dados do dia a dia. Na aula 05, essa tabela vira gráfico com o ggplot2."

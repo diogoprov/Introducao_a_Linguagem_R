@@ -10,6 +10,7 @@ Biology* 5: obad009).
 | Lição | Aula | Conteúdo |
 |---|---|---|
 | Primeiros Passos | 01 | R como calculadora, atribuição, coerção, `read.csv()`, `head()`/`dim()`/`str()`/`summary()`, `table()`, NAs, pacotes |
+| Manuseio de Dados com dplyr | 04 | pipe (`\|>` e `%>%`), `rename()`, `select()`, `mutate()`, `filter()`, `group_by()` + `summarise()`, `count()` |
 
 ## Para alunos: como fazer
 
