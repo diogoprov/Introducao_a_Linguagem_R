@@ -1,5 +1,7 @@
 # Introdução à Linguagem R — lições interativas no swirl
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22782697.svg)](https://doi.org/10.5281/zenodo.22782697)
+
 Lições em português para o pacote [swirl](https://swirlstats.com), que ensina
 R dentro do próprio console. Acompanham a disciplina
 [Introdução à Linguagem R](https://provetelab.org/intro-r/) (PPGEC/UFMS) e usam
@@ -53,7 +55,7 @@ O conteúdo deste repositório (lições, textos e código) está sob a licença
 [Creative Commons Atribuição 4.0 Internacional (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/deed.pt-br).
 Texto completo em [`LICENSE`](LICENSE). Ao reutilizar ou adaptar, cite:
 Provete, D.B. *Introdução à Linguagem R — lições interativas no swirl*.
-<https://github.com/diogoprov/Introducao_a_Linguagem_R>
+Zenodo. <https://doi.org/10.5281/zenodo.22782697>
 
 O arquivo `anuros_altitude.csv` vem do material suplementar de
 Bovo, R.P.; Simon, M.N.; Provete, D.B.; Lyra, M.; Navas, C.A.; Andrade, D.V.
