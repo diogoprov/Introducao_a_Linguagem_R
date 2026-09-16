@@ -56,5 +56,6 @@ Bovo, R.P.; Simon, M.N.; Provete, D.B.; Lyra, M.; Navas, C.A.; Andrade, D.V.
 (2023). Beyond Janzen's Hypothesis: How Amphibians That Climb Tropical
 Mountains Respond to Climate Variation. *Integrative Organismal Biology*
 5(1): obad009. <https://doi.org/10.1093/iob/obad009>. O artigo é de acesso
-aberto sob licença Creative Commons CC BY. O arquivo é redistribuído sem
+aberto sob licença Creative Commons Atribuição 4.0 (CC BY 4.0), a mesma deste
+repositório. O arquivo é redistribuído sem
 alterações de conteúdo e deve ser citado pela referência acima.
