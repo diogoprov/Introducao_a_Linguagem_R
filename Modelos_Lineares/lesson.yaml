@@ -1,0 +1,273 @@
+- Class: meta
+  Course: Introducao a Linguagem R
+  Lesson: Modelos Lineares
+  Author: Diogo B. Provete
+  Type: Standard
+  Organization: PPGEC/UFMS
+  Version: 2.4.5
+
+- Class: text
+  Output: "Bem-vindo(a) à lição da aula 06! Hoje você vai ajustar, diagnosticar e interpretar um modelo linear com os dados da disciplina. Leva uns 35 minutos."
+
+- Class: text
+  Output: "Vamos seguir o ciclo PPDAC: Problema, Plano, Dados, Análise e Conclusão. Na Análise, a ordem é sempre a mesma: exploração dos dados, modelagem, diagnose e, só no fim, interpretação. Quem pula direto para o p-valor corre o risco de interpretar um modelo que não merece confiança."
+
+- Class: text
+  Output: "Eu já preparei o objeto anuros, limpo como sai do script da aula 04: nomes em minúsculas, espécie e serra como fatores, e as colunas amplitude e tol_aquec recalculadas."
+
+- Class: text
+  Output: "PROBLEMA. Anfíbios de montanhas tropicais enfrentam temperaturas diferentes conforme a altitude. A tolerância ao aquecimento (tol_aquec) é a diferença entre o CTmax do animal e a temperatura máxima do mês mais quente no local (bio5). Ela mede a margem térmica: quanto o ambiente ainda pode esquentar antes de chegar ao limite do animal."
+
+- Class: text
+  Output: "Nossa pergunta: a tolerância ao aquecimento muda com a altitude? A variável resposta é tol_aquec, contínua, em graus Celsius. A preditora de interesse é altitude, contínua, em metros."
+
+- Class: mult_question
+  Output: "Antes de olhar os dados, escreva sua predição. No alto faz mais frio. Se o CTmax dos animais for parecido em todas as altitudes, o que você espera?"
+  AnswerChoices: A margem térmica aumenta com a altitude;A margem térmica diminui com a altitude;A margem térmica não muda com a altitude
+  CorrectAnswer: A margem térmica aumenta com a altitude
+  AnswerTests: omnitest(correctVal='A margem térmica aumenta com a altitude')
+  Hint: "tol_aquec = ctmax - bio5. Se ctmax fica igual e bio5 diminui no alto, o que acontece com a diferença?"
+
+- Class: text
+  Output: "PLANO. Antes de qualquer modelo, veja como os dados foram coletados. O desenho amostral decide quais perguntas os dados conseguem responder."
+
+- Class: cmd_question
+  Output: "Cruze serra e altitude numa tabela: table(anuros$serra, anuros$altitude)"
+  CorrectAnswer: table(anuros$serra, anuros$altitude)
+  AnswerTests: usa('table', 'count', 'xtabs')
+  Hint: "Digite table(anuros$serra, anuros$altitude)."
+
+- Class: mult_question
+  Output: "Como você viu na aula 04, cada altitude foi amostrada numa serra só. O que isso significa para a análise?"
+  AnswerChoices: Não dá para separar o efeito da altitude do efeito da serra;Precisamos incluir serra no modelo para controlar o efeito dela;A serra não influencia a tolerância ao aquecimento
+  CorrectAnswer: Não dá para separar o efeito da altitude do efeito da serra
+  AnswerTests: omnitest(correctVal='Não dá para separar o efeito da altitude do efeito da serra')
+  Hint: "Se nenhuma altitude aparece nas duas serras, que comparação permitiria distinguir uma da outra?"
+
+- Class: text
+  Output: "Por isso, nosso modelo vai focar na altitude e deixar serra de fora. Voltaremos a esse limite na conclusão."
+
+- Class: cmd_question
+  Output: "Agora cruze espécie e altitude: table(anuros$especie, anuros$altitude)"
+  CorrectAnswer: table(anuros$especie, anuros$altitude)
+  AnswerTests: usa('table', 'count', 'xtabs')
+  Hint: "Digite table(anuros$especie, anuros$altitude)."
+
+- Class: text
+  Output: "Repare nos zeros: nem toda espécie ocorre em toda altitude. Por exemplo, Leptodactylus latrans só aparece em três altitudes. Guarde isso: se as espécies diferirem entre si, a composição de espécies em cada altitude pode se misturar com o efeito da altitude."
+
+- Class: text
+  Output: "DADOS. Um checklist rápido antes de explorar: quantas observações têm a resposta medida?"
+
+- Class: cmd_question
+  Output: "Resuma a variável resposta com summary(anuros$tol_aquec)."
+  CorrectAnswer: summary(anuros$tol_aquec)
+  AnswerTests: omnitest(correctExpr='summary(anuros$tol_aquec)')
+  Hint: "Digite summary(anuros$tol_aquec)."
+
+- Class: mult_question
+  Output: "Há 35 NA em tol_aquec, herdados do CTmax. Com quantos animais o modelo vai trabalhar, sabendo que lm() descarta as linhas com NA?"
+  AnswerChoices: 190;225;35
+  CorrectAnswer: 190
+  AnswerTests: omnitest(correctVal='190')
+  Hint: "Tire os NA do total de 225 animais."
+
+- Class: text
+  Output: "ANÁLISE, parte 1: exploração. Os gráficos vêm antes do modelo porque ajudam a refinar a pergunta. Nesta lição uso os gráficos do R base, que cabem numa linha. Na aula 05 você viu como fazê-los com o ggplot2, e aqui qualquer um dos dois vale."
+
+- Class: cmd_question
+  Output: "Faça um gráfico de dispersão da resposta contra a altitude: plot(tol_aquec ~ altitude, data = anuros). O til (~) se lê 'em função de'."
+  CorrectAnswer: plot(tol_aquec ~ altitude, data = anuros)
+  AnswerTests: usa('plot', 'ggplot')
+  Hint: "Digite plot(tol_aquec ~ altitude, data = anuros). O gráfico aparece no painel Plots do RStudio."
+
+- Class: mult_question
+  Output: "O que o gráfico mostra?"
+  AnswerChoices: A margem tende a aumentar com a altitude, mas varia muito dentro de cada altitude;A margem diminui com a altitude;Não há nenhuma relação entre margem e altitude
+  CorrectAnswer: A margem tende a aumentar com a altitude, mas varia muito dentro de cada altitude
+  AnswerTests: omnitest(correctVal='A margem tende a aumentar com a altitude, mas varia muito dentro de cada altitude')
+  Hint: "Compare a nuvem de pontos a 35 m com as de 820 m e 1022 m. Veja também a altura de cada coluna de pontos."
+
+- Class: cmd_question
+  Output: "De onde vem tanta variação dentro de uma mesma altitude? Veja a margem por espécie com um boxplot: boxplot(tol_aquec ~ especie, data = anuros)"
+  CorrectAnswer: boxplot(tol_aquec ~ especie, data = anuros)
+  AnswerTests: usa('boxplot', 'ggplot', 'plot')
+  Hint: "Digite boxplot(tol_aquec ~ especie, data = anuros)."
+
+- Class: mult_question
+  Output: "Qual espécie tem a menor margem térmica?"
+  AnswerChoices: Dendropsophus minutus;Rhinella icterica;Boana faber
+  CorrectAnswer: Dendropsophus minutus
+  AnswerTests: omnitest(correctVal='Dendropsophus minutus')
+  Hint: "Procure a caixa mais baixa. Se algum nome não aparecer no eixo, é porque não coube: a ordem é alfabética."
+
+- Class: text
+  Output: "A exploração refinou a pergunta. As espécies diferem muito entre si e não estão distribuídas por igual nas altitudes. A pergunta passa a ser: a margem térmica muda com a altitude, levando em conta as diferenças entre espécies? No modelo, isso significa incluir especie como segunda preditora."
+
+- Class: text
+  Output: "ANÁLISE, parte 2: modelagem. A função lm() ajusta um modelo linear. A fórmula tem a resposta à esquerda do til e as preditoras à direita, somadas com +."
+
+- Class: cmd_question
+  Output: "Ajuste o modelo e guarde em m3: m3 <- lm(tol_aquec ~ altitude + especie, data = anuros)"
+  CorrectAnswer: m3 <- lm(tol_aquec ~ altitude + especie, data = anuros)
+  AnswerTests: usa('lm'); modelo_igual('m3', 'tol_aquec ~ altitude + especie')
+  Hint: "Digite m3 <- lm(tol_aquec ~ altitude + especie, data = anuros)."
+
+- Class: text
+  Output: "Por que m3? Porque o script da aula ajusta antes m1 (só altitude) e m2 (só espécie). Vamos usar o m1 mais adiante, para comparar."
+
+- Class: text
+  Output: "ANÁLISE, parte 3: diagnose. Ainda não é hora de olhar coeficientes nem p-valores. Primeiro vamos ver se o modelo atende às premissas: relação linear, resíduos aproximadamente normais, variância constante e nenhum ponto isolado puxando o ajuste."
+
+- Class: cmd_question
+  Output: "Os gráficos de diagnóstico são quatro. Para vê-los juntos, divida a janela gráfica em 2 por 2: par(mfrow = c(2, 2))"
+  CorrectAnswer: par(mfrow = c(2, 2))
+  AnswerTests: usa('par')
+  Hint: "Digite par(mfrow = c(2, 2))."
+
+- Class: cmd_question
+  Output: "Agora plote o modelo: plot(m3)"
+  CorrectAnswer: plot(m3)
+  AnswerTests: usa('plot', 'check_model')
+  Hint: "Digite plot(m3). Se o painel for pequeno, aumente a janela de gráficos do RStudio."
+
+- Class: text
+  Output: "O que cada painel responde. Residuals vs Fitted: a relação é mesmo linear? A linha vermelha deveria ficar perto do zero. Q-Q Residuals: os resíduos são aproximadamente normais? Os pontos deveriam seguir a diagonal. Scale-Location: a variância é constante? A linha deveria ficar horizontal. Residuals vs Leverage: algum ponto sozinho puxa o ajuste? Nenhum ponto deveria passar da linha tracejada de Cook."
+
+- Class: cmd_question
+  Output: "Volte a janela gráfica ao normal: par(mfrow = c(1, 1))"
+  CorrectAnswer: par(mfrow = c(1, 1))
+  AnswerTests: usa('par')
+  Hint: "Digite par(mfrow = c(1, 1))."
+
+- Class: text
+  Output: "Os gráficos pedem que você julgue olhando. O pacote performance aplica testes e devolve um veredito por escrito. As duas coisas se completam. Eu já carreguei o performance para você."
+
+- Class: cmd_question
+  Output: "Teste a normalidade dos resíduos: check_normality(m3)"
+  CorrectAnswer: check_normality(m3)
+  AnswerTests: usa('check_normality', 'check_model')
+  Hint: "Digite check_normality(m3)."
+
+- Class: cmd_question
+  Output: "Agora teste se a variância é constante: check_heteroscedasticity(m3)"
+  CorrectAnswer: check_heteroscedasticity(m3)
+  AnswerTests: usa('check_heteroscedasticity', 'check_heteroskedasticity', 'check_model')
+  Hint: "Digite check_heteroscedasticity(m3). Heteroscedasticidade é o nome da variância não constante."
+
+- Class: mult_question
+  Output: "O que os dois testes disseram?"
+  AnswerChoices: A normalidade passou, mas a variância não é constante;Os dois testes passaram;Os dois testes falharam
+  CorrectAnswer: A normalidade passou, mas a variância não é constante
+  AnswerTests: omnitest(correctVal='A normalidade passou, mas a variância não é constante')
+  Hint: "Leia o 'OK' ou o 'Warning' no começo de cada saída."
+
+- Class: text
+  Output: "Antes de consertar qualquer coisa, pense. Primeiro: um p pequeno com 190 animais detecta desvios que talvez não importem, então volte ao Scale-Location e julgue o tamanho do problema. Segundo: variância não constante não enviesa os coeficientes, mas prejudica os erros-padrão e, com eles, os p-valores e os intervalos de confiança. Terceiro: o modelo junta espécies que diferem em massa corpórea por duas ordens de grandeza. É de espantar que a variância não seja igual? Um teste não decide por você. Ele te obriga a ter um argumento."
+
+- Class: cmd_question
+  Output: "Última checagem: as preditoras são muito correlacionadas entre si? Use check_collinearity(m3)."
+  CorrectAnswer: check_collinearity(m3)
+  AnswerTests: usa('check_collinearity', 'multicollinearity', 'check_model')
+  Hint: "Digite check_collinearity(m3)."
+
+- Class: mult_question
+  Output: "Os valores de VIF de altitude e especie ficaram perto de 1. O que isso indica?"
+  AnswerChoices: Colinearidade baixa, então as duas preditoras podem ficar juntas no modelo;Colinearidade alta, então é preciso tirar uma delas;O modelo não convergiu
+  CorrectAnswer: Colinearidade baixa, então as duas preditoras podem ficar juntas no modelo
+  AnswerTests: omnitest(correctVal='Colinearidade baixa, então as duas preditoras podem ficar juntas no modelo')
+  Hint: "VIF igual a 1 é o mínimo possível. Valores acima de 5 ou 10 costumam preocupar."
+
+- Class: text
+  Output: "Resumo da diagnose: normalidade razoável, colinearidade baixa e variância que não é constante. Vamos interpretar o modelo, mas com cautela nos p-valores e nos intervalos. Há modelos que acomodam variância diferente por grupo, mas eles ficam para outra disciplina."
+
+- Class: text
+  Output: "ANÁLISE, parte 4: interpretação. Agora sim, os números."
+
+- Class: cmd_question
+  Output: "Comece pela tabela de análise de variância: anova(m3)"
+  CorrectAnswer: anova(m3)
+  AnswerTests: usa('anova', 'Anova')
+  Hint: "Digite anova(m3)."
+
+- Class: text
+  Output: "As duas preditoras explicam variação na margem térmica (Pr(>F) muito pequeno nas duas linhas). Mas valeu a pena incluir espécie? Para responder, ajuste o modelo só com altitude e compare os dois."
+
+- Class: cmd_question
+  Output: "Ajuste m1 <- lm(tol_aquec ~ altitude, data = anuros)"
+  CorrectAnswer: m1 <- lm(tol_aquec ~ altitude, data = anuros)
+  AnswerTests: usa('lm'); modelo_igual('m1', 'tol_aquec ~ altitude')
+  Hint: "Digite m1 <- lm(tol_aquec ~ altitude, data = anuros)."
+
+- Class: cmd_question
+  Output: "Compare os dois modelos: anova(m1, m3)"
+  CorrectAnswer: anova(m1, m3)
+  AnswerTests: usa('anova')
+  Hint: "Digite anova(m1, m3). O modelo mais simples vai primeiro."
+
+- Class: mult_question
+  Output: "O que a comparação mostra?"
+  AnswerChoices: O modelo com espécie explica bem mais, e a diferença é significativa;Os dois modelos explicam o mesmo;O modelo só com altitude é melhor
+  CorrectAnswer: O modelo com espécie explica bem mais, e a diferença é significativa
+  AnswerTests: omnitest(correctVal='O modelo com espécie explica bem mais, e a diferença é significativa')
+  Hint: "Compare a coluna RSS (soma dos quadrados dos resíduos) dos dois modelos e olhe o Pr(>F)."
+
+- Class: text
+  Output: "summary() imprime o resultado na tela e acabou. O pacote broom devolve o mesmo resultado como tabela, que pode entrar no dplyr, num gráfico ou num relatório. Eu já carreguei o broom."
+
+- Class: cmd_question
+  Output: "Extraia os coeficientes com intervalos de confiança: tidy(m3, conf.int = TRUE)"
+  CorrectAnswer: tidy(m3, conf.int = TRUE)
+  AnswerTests: usa('tidy'); tabela_com_colunas('term,estimate,conf.low,conf.high')
+  Hint: "Digite tidy(m3, conf.int = TRUE)."
+
+- Class: mult_question
+  Output: "A estimativa de altitude é cerca de 0.0031, em graus Celsius por metro. Como dizer isso de um jeito que faça sentido para um ecólogo?"
+  AnswerChoices: A margem térmica aumenta cerca de 3 °C a cada 1000 m de altitude;A margem térmica aumenta 0.0031 °C por quilômetro;A margem térmica aumenta 31 °C a cada 1000 m
+  CorrectAnswer: A margem térmica aumenta cerca de 3 °C a cada 1000 m de altitude
+  AnswerTests: omnitest(correctVal='A margem térmica aumenta cerca de 3 °C a cada 1000 m de altitude')
+  Hint: "Multiplique 0.0031 por 1000."
+
+- Class: text
+  Output: "Agora os coeficientes de espécie. Com cinco espécies saem só quatro coeficientes. O R usa a primeira em ordem alfabética, Boana faber, como referência, e cada coeficiente é a DIFERENÇA em relação a ela, na mesma altitude."
+
+- Class: mult_question
+  Output: "O coeficiente de Dendropsophus minutus é cerca de -5.1. O que ele significa?"
+  AnswerChoices: Na mesma altitude, D. minutus tem margem cerca de 5 °C menor que Boana faber;D. minutus tem margem de -5 °C;A margem de D. minutus cai 5 °C a cada metro
+  CorrectAnswer: Na mesma altitude, D. minutus tem margem cerca de 5 °C menor que Boana faber
+  AnswerTests: omnitest(correctVal='Na mesma altitude, D. minutus tem margem cerca de 5 °C menor que Boana faber')
+  Hint: "Cada coeficiente de espécie é uma diferença em relação à espécie de referência."
+
+- Class: cmd_question
+  Output: "Para uma visão do modelo inteiro, numa linha só, use glance(m3)."
+  CorrectAnswer: glance(m3)
+  AnswerTests: usa('glance', 'r2', 'summary')
+  Hint: "Digite glance(m3)."
+
+- Class: text
+  Output: "O r.squared de m3 é 0.76. O de m1, só com altitude, é 0.31. A espécie explica mais variação na margem térmica do que a altitude: as diferenças entre espécies são grandes."
+
+- Class: text
+  Output: "Uma última pergunta de interpretação: a margem aumenta no alto porque os animais de lá aguentam mais calor, ou porque o ambiente é mais frio? Como tol_aquec é ctmax - bio5, dá para olhar cada parte separadamente."
+
+- Class: cmd_question
+  Output: "Ajuste um modelo para o próprio ctmax, com as mesmas preditoras, e veja os coeficientes: lm(ctmax ~ altitude + especie, data = anuros)"
+  CorrectAnswer: lm(ctmax ~ altitude + especie, data = anuros)
+  AnswerTests: usa('lm')
+  Hint: "Digite lm(ctmax ~ altitude + especie, data = anuros)."
+
+- Class: mult_question
+  Output: "O coeficiente de altitude para ctmax é cerca de -0.0005, ou seja, meio grau a menos a cada 1000 m. Já bio5 cai cerca de 3.6 °C a cada 1000 m. De onde vem, então, o aumento da margem térmica no alto?"
+  AnswerChoices: Quase todo do ambiente mais frio, não de um CTmax maior;De os animais do alto terem CTmax bem maior;Das diferenças entre espécies
+  CorrectAnswer: Quase todo do ambiente mais frio, não de um CTmax maior
+  AnswerTests: omnitest(correctVal='Quase todo do ambiente mais frio, não de um CTmax maior')
+  Hint: "A margem é ctmax - bio5. Qual das duas partes muda mais com a altitude?"
+
+- Class: text
+  Output: "CONCLUSÃO. A margem térmica aumenta com a altitude, cerca de 3 °C por 1000 m, descontadas as diferenças entre espécies. Esse aumento vem principalmente de o ambiente ser mais frio no alto. Os p-valores pedem cautela, porque a variância não é constante."
+
+- Class: text
+  Output: "E o limite do Plano continua valendo: como altitude e serra estão confundidas, não dá para dizer se esse efeito é da altitude ou da serra. Se você tentar lm(tol_aquec ~ factor(altitude) * serra), o R devolve NA nos termos de serra, porque não há informação para estimá-los. Por isso o artigo original analisa as duas serras separadamente."
+
+- Class: text
+  Output: "Pronto! Você passou pelo ciclo completo: fez a pergunta, olhou o desenho amostral, explorou os dados, ajustou o modelo, diagnosticou e só então interpretou. No script da aula 06 há mais: modelos por serra com group_modify() e o que muda quando se centraliza a altitude. Vale rodar."
