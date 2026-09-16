@@ -17,9 +17,12 @@ Biology* 5: obad009).
 install.packages("swirl")        # uma vez só
 library(swirl)
 select_language("portuguese")    # menus do swirl em português (uma vez só)
-install_course_github("diogoprov", "Introducao_a_Linguagem_R", branch = "main")
+install_course_url("https://github.com/diogoprov/Introducao_a_Linguagem_R/zipball/main")
 swirl()
 ```
+
+Use `install_course_url()` com o endereço acima, e não `install_course_github()`:
+esta última monta o endereço com `http://` e pode falhar por tempo esgotado.
 
 Dentro do swirl: `skip()` pula a pergunta, `bye()` sai guardando o progresso,
 `main()` volta ao menu.
