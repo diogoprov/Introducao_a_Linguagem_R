@@ -12,8 +12,10 @@ Biology* 5: obad009).
 | Lição | Aula | Conteúdo |
 |---|---|---|
 | Primeiros Passos | 01 | R como calculadora, atribuição, coerção, `read.csv()`, `head()`/`dim()`/`str()`/`summary()`, `table()`, NAs, pacotes |
+| Curadoria de Dados | 02 | auditoria de uma planilha mal feita e de um arquivo publicado: nome de arquivo, cabeçalho fora do lugar, tipos, categorias, duplicatas, datas, ausentes, coluna derivada, variável de sítio, metadados |
 | Manuseio de Dados com dplyr | 04 | pipe (`\|>` e `%>%`), `rename()`, `select()`, `mutate()`, `filter()`, `group_by()` + `summarise()`, `count()` |
 | Modelos Lineares | 06 | ciclo PPDAC: desenho amostral, exploração, `lm()`, diagnose com `plot()` e `performance`, interpretação com `anova()` e `broom` |
+| Rudimentos de Programação | 07 | funções, argumento padrão, escopo, `if`/`ifelse`/`for`, `purrr::map` e `map_dbl`, um modelo por espécie com `split()` + `map()` e `broom` |
 
 ## Para alunos: como fazer
 

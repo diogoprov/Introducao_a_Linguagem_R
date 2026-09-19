@@ -1,0 +1,273 @@
+- Class: meta
+  Course: Introducao a Linguagem R
+  Lesson: Rudimentos de Programacao
+  Author: Diogo B. Provete
+  Type: Standard
+  Organization: PPGEC/UFMS
+  Version: 2.4.5
+
+- Class: text
+  Output: "Bem-vindo(a) à lição da aula 07! Aqui você vai escrever suas primeiras funções, usar controle de fluxo e trocar os laços pelo purrr. Leva uns 30 minutos."
+
+- Class: text
+  Output: "Deixei prontos dois objetos: anuros, limpo como sai do script da aula 04, e colunas, um vetor com os nomes das seis variáveis contínuas que vamos resumir várias vezes (ctmin, ctmax, amplitude, tol_aquec, ewl e massa)."
+
+- Class: text
+  Output: "Comecemos pelo problema que a aula resolve. Na aula 04, para descrever uma variável, escrevemos a média e o desvio-padrão; para descrever seis, copiamos e colamos o mesmo trecho seis vezes."
+
+- Class: cmd_question
+  Output: "Calcule a média de ctmax, ignorando os ausentes, com mean(anuros$ctmax, na.rm = TRUE)."
+  CorrectAnswer: mean(anuros$ctmax, na.rm = TRUE)
+  AnswerTests: omnitest(correctExpr='mean(anuros$ctmax, na.rm = TRUE)')
+  Hint: "Digite mean(anuros$ctmax, na.rm = TRUE)."
+
+- Class: text
+  Output: "Agora imagine essa linha repetida seis vezes, trocando só o nome da coluna. O custo do copiar-e-colar não é a digitação: é que, na quinta linha, você troca a coluna em um lugar e esquece do outro. O R não reclama, e o resultado sai errado em silêncio."
+
+- Class: text
+  Output: "Uma função tem nome, argumentos e corpo. O valor da última expressão do corpo é o que ela devolve. Vamos escrever uma que calcula o coeficiente de variação, isto é, o desvio-padrão dividido pela média."
+
+- Class: cmd_question
+  Output: "Crie a função digitando cv <- function(x) sd(x, na.rm = TRUE) / mean(x, na.rm = TRUE)"
+  CorrectAnswer: cv <- function(x) sd(x, na.rm = TRUE) / mean(x, na.rm = TRUE)
+  AnswerTests: funcao_equivale('cv', 'function(x) sd(x, na.rm = TRUE) / mean(x, na.rm = TRUE)')
+  Hint: "Digite cv <- function(x) sd(x, na.rm = TRUE) / mean(x, na.rm = TRUE) . O x é um nome qualquer: ele só existe dentro da função."
+
+- Class: cmd_question
+  Output: "Use a sua função: cv(anuros$ctmax)"
+  CorrectAnswer: cv(anuros$ctmax)
+  AnswerTests: omnitest(correctExpr='cv(anuros$ctmax)')
+  Hint: "Digite cv(anuros$ctmax)."
+
+- Class: cmd_question
+  Output: "O CTmax varia pouco entre os animais, cerca de 7% da média. Compare com a massa, que é bem mais variável: cv(anuros$massa)"
+  CorrectAnswer: cv(anuros$massa)
+  AnswerTests: omnitest(correctExpr='cv(anuros$massa)')
+  Hint: "Digite cv(anuros$massa)."
+
+- Class: text
+  Output: "O coeficiente de variação da massa passa de 1, ou seja, o desvio-padrão é maior que a média. Isso é esperado num conjunto que mistura Dendropsophus minutus, de poucos gramas, com Rhinella icterica, de mais de cem."
+
+- Class: text
+  Output: "Argumentos podem ter valor padrão. Assim a função funciona sem que você informe tudo, mas continua ajustável quando você precisa."
+
+- Class: cmd_question
+  Output: "Escreva agora: media <- function(x, digitos = 2) round(mean(x, na.rm = TRUE), digitos)"
+  CorrectAnswer: media <- function(x, digitos = 2) round(mean(x, na.rm = TRUE), digitos)
+  AnswerTests: funcao_equivale('media', 'function(x, digitos = 2) round(mean(x, na.rm = TRUE), digitos)')
+  Hint: "Digite media <- function(x, digitos = 2) round(mean(x, na.rm = TRUE), digitos)"
+
+- Class: cmd_question
+  Output: "Chame media(anuros$ewl) e repare que o padrão de duas casas valeu sem você pedir."
+  CorrectAnswer: media(anuros$ewl)
+  AnswerTests: omnitest(correctExpr='media(anuros$ewl)')
+  Hint: "Digite media(anuros$ewl)."
+
+- Class: cmd_question
+  Output: "Agora peça quatro casas: media(anuros$ewl, digitos = 4)"
+  CorrectAnswer: media(anuros$ewl, digitos = 4)
+  AnswerTests: omnitest(correctExpr='media(anuros$ewl, digitos = 4)')
+  Hint: "Digite media(anuros$ewl, digitos = 4)."
+
+- Class: text
+  Output: "Uma advertência sobre escopo: o que entra na função é uma cópia. Vamos ver isso acontecer."
+
+- Class: cmd_question
+  Output: "Crie um objeto qualquer: x <- 10"
+  CorrectAnswer: x <- 10
+  AnswerTests: omnitest(correctExpr='x <- 10')
+  Hint: "Digite x <- 10."
+
+- Class: cmd_question
+  Output: "Agora uma função que muda o próprio argumento e o devolve: troca <- function(x) { x <- 999; x }"
+  CorrectAnswer: troca <- function(x) { x <- 999; x }
+  AnswerTests: funcao_troca()
+  Hint: "Digite troca <- function(x) { x <- 999; x }"
+
+- Class: cmd_question
+  Output: "Chame troca(x) e veja o que ela devolve."
+  CorrectAnswer: troca(x)
+  AnswerTests: omnitest(correctExpr='troca(x)')
+  Hint: "Digite troca(x)."
+
+- Class: cmd_question
+  Output: "Agora digite x, sozinho, para ver quanto ele vale depois da chamada."
+  CorrectAnswer: x
+  AnswerTests: omnitest(correctExpr='x')
+  Hint: "Digite apenas x."
+
+- Class: mult_question
+  Output: "A função devolveu 999, mas x continua valendo 10. Por quê?"
+  AnswerChoices: A função trabalhou numa cópia, e para guardar o resultado é preciso atribuí-lo;Porque x é um número, e números não mudam;Porque faltou usar return()
+  CorrectAnswer: A função trabalhou numa cópia, e para guardar o resultado é preciso atribuí-lo
+  AnswerTests: omnitest(correctVal='A função trabalhou numa cópia, e para guardar o resultado é preciso atribuí-lo')
+  Hint: "O x de dentro da função e o x de fora são objetos diferentes, com o mesmo nome. Para ficar com o resultado, faça x <- troca(x)."
+
+- Class: text
+  Output: "Agora controle de fluxo. O if escolhe um caminho conforme uma condição, e o else dá o caminho alternativo."
+
+- Class: cmd_question
+  Output: "Escreva: classifica <- function(m) if (m < 1000) 'baixa' else 'alta'"
+  CorrectAnswer: classifica <- function(m) if (m < 1000) 'baixa' else 'alta'
+  AnswerTests: funcao_equivale('classifica', "function(m) if (m < 1000) 'baixa' else 'alta'", teste = "35")
+  Hint: "Digite classifica <- function(m) if (m < 1000) 'baixa' else 'alta'"
+
+- Class: cmd_question
+  Output: "Teste com a altitude mais baixa do estudo: classifica(35)"
+  CorrectAnswer: classifica(35)
+  AnswerTests: omnitest(correctExpr='classifica(35)')
+  Hint: "Digite classifica(35)."
+
+- Class: mult_question
+  Output: "E se você chamar classifica(anuros$altitude), com a coluna inteira?"
+  AnswerChoices: Dá erro, porque o if enxerga um valor de cada vez;Funciona e classifica as 225 linhas;Funciona, mas devolve tudo como 'baixa'
+  CorrectAnswer: Dá erro, porque o if enxerga um valor de cada vez
+  AnswerTests: omnitest(correctVal='Dá erro, porque o if enxerga um valor de cada vez')
+  Hint: "A partir do R 4.2.0 isso é erro. Em versões antigas era um aviso, e o R usava só o primeiro elemento, que é pior: o resultado saía errado sem avisar."
+
+- Class: cmd_question
+  Output: "Para a coluna inteira existe a versão vetorizada. Digite: anuros$faixa <- ifelse(anuros$altitude < 1000, 'baixa', 'alta')"
+  CorrectAnswer: anuros$faixa <- ifelse(anuros$altitude < 1000, 'baixa', 'alta')
+  AnswerTests: usa('ifelse')
+  Hint: "Digite anuros$faixa <- ifelse(anuros$altitude < 1000, 'baixa', 'alta')"
+
+- Class: cmd_question
+  Output: "Confira o resultado com table(anuros$faixa)."
+  CorrectAnswer: table(anuros$faixa)
+  AnswerTests: omnitest(correctExpr='table(anuros$faixa)')
+  Hint: "Digite table(anuros$faixa)."
+
+- Class: text
+  Output: "Quando não existe versão vetorizada, entra o laço. O for percorre os elementos de um vetor, um de cada vez."
+
+- Class: cmd_question
+  Output: "Digite: for (cc in colunas) cat(cc, media(anuros[[cc]]), '\\n')"
+  CorrectAnswer: for (cc in colunas) cat(cc, media(anuros[[cc]]), '\n')
+  AnswerTests: usa('for')
+  Hint: "Digite for (cc in colunas) cat(cc, media(anuros[[cc]]), '\\n') . Os colchetes duplos servem para pegar a coluna cujo nome está guardado em cc."
+
+- Class: mult_question
+  Output: "O erro mais comum com for é começar com res <- c() e ir colando resultados com res <- c(res, novo). Por que isso é ruim?"
+  AnswerChoices: O R copia o objeto inteiro a cada volta, o que fica lento e esconde erros de tamanho;Porque c() não aceita números;Porque o for não aceita atribuição
+  CorrectAnswer: O R copia o objeto inteiro a cada volta, o que fica lento e esconde erros de tamanho
+  AnswerTests: omnitest(correctVal='O R copia o objeto inteiro a cada volta, o que fica lento e esconde erros de tamanho')
+  Hint: "O certo é reservar o espaço antes, com res <- numeric(length(colunas)), e preencher por índice com seq_along(colunas)."
+
+- Class: text
+  Output: "Duas dicas sobre índices: use seq_along(x) em vez de 1:length(x), porque com x vazio 1:0 devolve c(1, 0) e o laço roda duas vezes com índices inválidos. E lembre que o while repete enquanto a condição for verdadeira, o que exige que algo dentro do laço mude essa condição, senão ele não para."
+
+- Class: text
+  Output: "Agora a alternativa funcional. O pacote purrr faz o mesmo que o laço, sem contador e sem pré-alocação: você diz qual função aplicar a cada elemento."
+
+- Class: cmd_question
+  Output: "Carregue o pacote com library(purrr)."
+  CorrectAnswer: library(purrr)
+  AnswerTests: omnitest(correctExpr='library(purrr)')
+  Hint: "Digite library(purrr)."
+
+- Class: cmd_question
+  Output: "Aplique a média às seis colunas de uma vez: map_dbl(anuros[colunas], mean, na.rm = TRUE)"
+  CorrectAnswer: map_dbl(anuros[colunas], mean, na.rm = TRUE)
+  AnswerTests: omnitest(correctExpr='map_dbl(anuros[colunas], mean, na.rm = TRUE)')
+  Hint: "Digite map_dbl(anuros[colunas], mean, na.rm = TRUE) . O que vem depois da função é passado adiante para ela."
+
+- Class: text
+  Output: "map() devolve sempre uma lista. As variantes map_dbl(), map_chr(), map_int() e map_lgl() devolvem um vetor do tipo pedido e dão erro se o resultado não for daquele tipo. Esse erro é uma vantagem: ele aparece na hora, e não três passos adiante."
+
+- Class: cmd_question
+  Output: "Use a sua função dentro do map: map_dbl(anuros[colunas], cv)"
+  CorrectAnswer: map_dbl(anuros[colunas], cv)
+  AnswerTests: omnitest(correctExpr='map_dbl(anuros[colunas], cv)')
+  Hint: "Digite map_dbl(anuros[colunas], cv) . Sem parênteses depois de cv: você passa a função, não o resultado dela."
+
+- Class: cmd_question
+  Output: "Para algo que não tem função pronta, o purrr aceita uma fórmula, em que .x é cada elemento. Conte os ausentes de cada coluna: map_dbl(anuros[colunas], ~ sum(is.na(.x)))"
+  CorrectAnswer: map_dbl(anuros[colunas], ~ sum(is.na(.x)))
+  AnswerTests: omnitest(correctExpr='map_dbl(anuros[colunas], ~ sum(is.na(.x)))')
+  Hint: "Digite map_dbl(anuros[colunas], ~ sum(is.na(.x)))"
+
+- Class: text
+  Output: "Trinta e cinco ausentes em ctmax, e os mesmos trinta e cinco em amplitude e tol_aquec, que derivam dele. É a mesma contagem que você viu na lição da aula 02, agora em uma linha."
+
+- Class: text
+  Output: "Vamos ao caso que motivou a aula. Na aula 06 ajustamos um modelo para o conjunto todo. Agora queremos um modelo por espécie, sem escrever lm() cinco vezes."
+
+- Class: cmd_question
+  Output: "Primeiro, quebre os dados por espécie e ajuste um modelo em cada pedaço: modelos <- map(split(anuros, anuros$especie), ~ lm(tol_aquec ~ altitude, data = .x))"
+  CorrectAnswer: modelos <- map(split(anuros, anuros$especie), ~ lm(tol_aquec ~ altitude, data = .x))
+  AnswerTests: lista_de_modelos('modelos', 5)
+  Hint: "Digite modelos <- map(split(anuros, anuros$especie), ~ lm(tol_aquec ~ altitude, data = .x))"
+
+- Class: cmd_question
+  Output: "Confirme que saíram cinco modelos, um por espécie: length(modelos)"
+  CorrectAnswer: length(modelos)
+  AnswerTests: omnitest(correctExpr='length(modelos)')
+  Hint: "Digite length(modelos)."
+
+- Class: text
+  Output: "Cada elemento de modelos é um objeto lm completo. Para comparar os cinco, não queremos imprimir cinco summary(): queremos uma tabela. É para isso que serve o broom, que você usou na aula 06."
+
+- Class: cmd_question
+  Output: "Carregue o pacote com library(broom)."
+  CorrectAnswer: library(broom)
+  AnswerTests: omnitest(correctExpr='library(broom)')
+  Hint: "Digite library(broom)."
+
+- Class: cmd_question
+  Output: "Junte os coeficientes dos cinco modelos numa tabela só: coefs <- map_dfr(modelos, tidy, .id = 'especie')"
+  CorrectAnswer: coefs <- map_dfr(modelos, tidy, .id = 'especie')
+  AnswerTests: usa('map_dfr')
+  Hint: "Digite coefs <- map_dfr(modelos, tidy, .id = 'especie') . O argumento .id guarda, numa coluna, o nome de cada elemento da lista."
+
+- Class: cmd_question
+  Output: "A tabela tem intercepto e inclinação de cada modelo. Fique só com a inclinação: subset(coefs, term == 'altitude')"
+  CorrectAnswer: subset(coefs, term == 'altitude')
+  AnswerTests: usa('subset')
+  Hint: "Digite subset(coefs, term == 'altitude')"
+
+- Class: mult_question
+  Output: "Quatro espécies têm inclinação perto de 0.003 °C por metro e p muito pequeno. Physalaemus cuvieri tem inclinação de 0.00075 e p de 0.40. O que isso significa?"
+  AnswerChoices: Nessa espécie os dados não mostram mudança da margem térmica com a altitude;Que o modelo dela está errado;Que P. cuvieri não ocorre em altitude
+  CorrectAnswer: Nessa espécie os dados não mostram mudança da margem térmica com a altitude
+  AnswerTests: omnitest(correctVal='Nessa espécie os dados não mostram mudança da margem térmica com a altitude')
+  Hint: "Não rejeitar a hipótese nula não prova que o efeito é zero. Com 25 animais e um gradiente curto, o teste tem pouco poder."
+
+- Class: cmd_question
+  Output: "Veja o ajuste de cada modelo, ficando com três colunas: map_dfr(modelos, glance, .id = 'especie')[, c('especie', 'r.squared', 'nobs')]"
+  CorrectAnswer: map_dfr(modelos, glance, .id = 'especie')[, c('especie', 'r.squared', 'nobs')]
+  AnswerTests: usa('glance')
+  Hint: "Digite map_dfr(modelos, glance, .id = 'especie')[, c('especie', 'r.squared', 'nobs')] . Sem os colchetes, a tabela tem treze colunas e não cabe na tela."
+
+- Class: text
+  Output: "Os R² vão de 0.03 em Physalaemus cuvieri a 0.81 em Leptodactylus latrans. A coluna nobs mostra quantos animais entraram em cada modelo, sempre menos que o total da espécie, porque o lm() descarta as linhas sem tol_aquec."
+
+- Class: text
+  Output: "Automatizar o ajuste, porém, não automatiza o julgamento. Vamos olhar o desenho amostral por trás desses cinco modelos."
+
+- Class: cmd_question
+  Output: "Cruze espécie com serra: table(anuros$especie, anuros$serra)"
+  CorrectAnswer: table(anuros$especie, anuros$serra)
+  AnswerTests: omnitest(correctExpr='table(anuros$especie, anuros$serra)')
+  Hint: "Digite table(anuros$especie, anuros$serra)."
+
+- Class: cmd_question
+  Output: "Agora cruze espécie com altitude: table(anuros$especie, anuros$altitude)"
+  CorrectAnswer: table(anuros$especie, anuros$altitude)
+  AnswerTests: omnitest(correctExpr='table(anuros$especie, anuros$altitude)')
+  Hint: "Digite table(anuros$especie, anuros$altitude)."
+
+- Class: mult_question
+  Output: "As altitudes de 550 e 1600 m estão na Serra da Mantiqueira; as demais, na Serra do Mar. Em Dendropsophus minutus e Leptodactylus latrans, o ponto mais alto (1600 m) vem de uma serra diferente do resto da amostra. O que isso faz com a inclinação estimada para essas duas espécies?"
+  AnswerChoices: Confunde o efeito da altitude com o da serra, porque as duas variam juntas;Nada, porque a serra não entrou no modelo;Aumenta o R² sem mudar a interpretação
+  CorrectAnswer: Confunde o efeito da altitude com o da serra, porque as duas variam juntas
+  AnswerTests: omnitest(correctVal='Confunde o efeito da altitude com o da serra, porque as duas variam juntas')
+  Hint: "É o mesmo problema da aula 06, agora dentro de cada espécie. O map() ajusta os cinco modelos com a mesma facilidade, tenham eles sentido ou não."
+
+- Class: text
+  Output: "Por isso vale escrever funções que checam as premissas logo no começo, antes de calcular qualquer coisa. Por exemplo, uma função que ajusta o modelo só se houver pelo menos dez observações e três altitudes, e que devolve NULL com um aviso quando não houver. Erro que aparece cedo custa menos que resultado errado que aparece tarde."
+
+- Class: text
+  Output: "Para praticar depois, no seu R: (i) escreva erro_padrao(x), que devolva sd(x)/sqrt(n) ignorando ausentes, e aplique-a às seis colunas com map_dbl; (ii) refaça os modelos trocando especie por serra e conte quantas linhas do seu código mudaram (se foi mais de uma, generalize); e (iii) repita o item (ii) para cada serra separadamente, que é como o artigo original analisa esses dados."
+
+- Class: text
+  Output: "Pronto! Você escreveu funções com argumento padrão, viu por que o escopo protege o ambiente global, usou if, ifelse e for, e trocou o laço pelo map. O resto da família purrr (map2, pmap, imap) segue a mesma lógica: muda só quantos argumentos variam de cada vez."

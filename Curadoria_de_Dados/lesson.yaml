@@ -1,0 +1,248 @@
+- Class: meta
+  Course: Introducao a Linguagem R
+  Lesson: Curadoria de Dados
+  Author: Diogo B. Provete
+  Type: Standard
+  Organization: PPGEC/UFMS
+  Version: 2.4.5
+
+- Class: text
+  Output: "Bem-vindo(a) à lição da aula 02! Aqui você vai auditar duas tabelas: a planilha deliberadamente mal feita do exercício em dupla e o arquivo publicado que usamos o resto do curso. Leva uns 30 minutos."
+
+- Class: text
+  Output: "A planilha da aula chegou com o nome 'Planilha de dados FINAL v2 (1).xlsx'. Ela é fictícia, inventada para o exercício, mas todo defeito dela veio de uma planilha real que alguém já me mandou."
+
+- Class: mult_question
+  Output: "Antes de abrir o arquivo: qual destes nomes você daria a ele?"
+  AnswerChoices: 2019-03-12_coleta-cerrado_bruto.csv;Planilha de dados FINAL v2 (1).xlsx;dados_FINAL_novo(2).xlsx;DADOS TESE - NAO MEXER.xlsx
+  CorrectAnswer: 2019-03-12_coleta-cerrado_bruto.csv
+  AnswerTests: omnitest(correctVal='2019-03-12_coleta-cerrado_bruto.csv')
+  Hint: "Pense em três coisas: o computador consegue ordenar por esse nome? Dá para achar por busca? O nome diz o que tem dentro?"
+
+- Class: text
+  Output: "Três regras bastam para a maioria dos casos: sem espaços, acentos ou parênteses; data no padrão ISO (aaaa-mm-dd), que ordena sozinha; e o que o arquivo é (bruto, limpo, resultado) escrito no nome. Palavras como FINAL, novo e v2 são controle de versão feito à mão, e é isso que o git resolve."
+
+- Class: text
+  Output: "Guardei a planilha, exportada para csv sem mexer em nada, no objeto linhas. São as linhas cruas do arquivo, do jeito que estão lá dentro."
+
+- Class: cmd_question
+  Output: "Veja as seis primeiras linhas com head(linhas, 6)."
+  CorrectAnswer: head(linhas, 6)
+  AnswerTests: omnitest(correctExpr='head(linhas, 6)')
+  Hint: "Digite head(linhas, 6)."
+
+- Class: mult_question
+  Output: "Por que read.csv() não consegue ler esse arquivo direito do jeito que ele está?"
+  AnswerChoices: Os nomes das colunas estão na quinta linha, não na primeira;O arquivo está corrompido;Porque o arquivo tem acentos
+  CorrectAnswer: Os nomes das colunas estão na quinta linha, não na primeira
+  AnswerTests: omnitest(correctVal='Os nomes das colunas estão na quinta linha, não na primeira')
+  Hint: "Olhe as quatro primeiras linhas: título, subtítulo, um aviso e uma linha vazia."
+
+- Class: text
+  Output: "Por isso eu li o arquivo com read.csv(arquivo_ruim, skip = 4), e guardei o resultado em coleta. Repare que o skip resolve o cabeçalho, mas não resolve o que vem logo abaixo dele: a linha que traz as unidades (mm, g, M/F) virou a primeira linha de dados."
+
+- Class: cmd_question
+  Output: "Veja as dimensões de coleta com dim(coleta)."
+  CorrectAnswer: dim(coleta)
+  AnswerTests: omnitest(correctExpr='dim(coleta)')
+  Hint: "Digite dim(coleta)."
+
+- Class: mult_question
+  Output: "São 18 linhas e 12 colunas, mas a planilha tem só nove variáveis. De onde vieram as outras três colunas?"
+  AnswerChoices: De um comentário solto numa célula longe da tabela;De um erro do read.csv();De colunas ocultas com dados de verdade
+  CorrectAnswer: De um comentário solto numa célula longe da tabela
+  AnswerTests: omnitest(correctVal='De um comentário solto numa célula longe da tabela')
+  Hint: "Na terceira linha do arquivo há um recado sobre conferir o caderno de campo, escrito lá na coluna L."
+
+- Class: cmd_question
+  Output: "Agora veja os nomes das colunas com names(coleta)."
+  CorrectAnswer: names(coleta)
+  AnswerTests: omnitest(correctExpr='names(coleta)')
+  Hint: "Digite names(coleta)."
+
+- Class: text
+  Output: "O R trocou espaços, acentos e símbolos por pontos, e o que era 'CRC (mm) média!' virou algo que ninguém quer digitar. Três problemas de uma vez: nome longo e com pontuação, unidade escondida no nome da coluna e um ponto de exclamação que não significa nada para o computador."
+
+- Class: cmd_question
+  Output: "Deixei nomes curtos prontos no objeto nomes_novos. Aplique-os digitando names(coleta) <- nomes_novos."
+  CorrectAnswer: names(coleta) <- nomes_novos
+  AnswerTests: nomes_trocados()
+  Hint: "Digite names(coleta) <- nomes_novos. Se quiser ver antes o que tem lá, digite nomes_novos."
+
+- Class: cmd_question
+  Output: "Agora olhe a estrutura da tabela com str(coleta)."
+  CorrectAnswer: str(coleta)
+  AnswerTests: omnitest(correctExpr='str(coleta)')
+  Hint: "Digite str(coleta)."
+
+- Class: mult_question
+  Output: "A coluna crc é o comprimento rostro-cloacal, em milímetros. Por que o R a leu como texto (chr), e não como número?"
+  AnswerChoices: Porque a coluna tem valores que não são números;Porque o read.csv() sempre lê tudo como texto;Porque a coluna tem números decimais
+  CorrectAnswer: Porque a coluna tem valores que não são números
+  AnswerTests: omnitest(correctVal='Porque a coluna tem valores que não são números')
+  Hint: "Basta uma célula com texto para a coluna inteira virar texto."
+
+- Class: cmd_question
+  Output: "Veja quais valores existem nessa coluna com unique(coleta$crc)."
+  CorrectAnswer: unique(coleta$crc)
+  AnswerTests: omnitest(correctExpr='unique(coleta$crc)')
+  Hint: "Digite unique(coleta$crc)."
+
+- Class: text
+  Output: "Em uma coluna só há cinco problemas diferentes: vírgula como separador decimal, a unidade digitada dentro da célula ('15,0 mm'), um espaço antes do número (' 14.2'), e dois jeitos de dizer que o dado não existe ('-' e 'sem dados'). E ainda sobrou o 'mm' da linha de unidades."
+
+- Class: cmd_question
+  Output: "Veja o que acontece ao forçar a coluna para número com as.numeric(coleta$crc). O R vai avisar que introduziu NAs por coerção; era isso que queríamos ver."
+  CorrectAnswer: as.numeric(coleta$crc)
+  AnswerTests: omnitest(correctExpr='as.numeric(coleta$crc)')
+  Hint: "Digite as.numeric(coleta$crc)."
+
+- Class: text
+  Output: "Nove valores viraram NA em silêncio, fora o aviso. Se alguém rodar mean() sem olhar, vai calcular a média de um pedaço dos dados, sem perceber. É por isso que a limpeza vem antes da análise, e não durante."
+
+- Class: cmd_question
+  Output: "Vamos aos pontos de coleta. Liste-os com unique(coleta$ponto)."
+  CorrectAnswer: unique(coleta$ponto)
+  AnswerTests: omnitest(correctExpr='unique(coleta$ponto)')
+  Hint: "Digite unique(coleta$ponto)."
+
+- Class: mult_question
+  Output: "Quantos pontos de coleta existem de verdade nessa planilha?"
+  AnswerChoices: 4;13;6;12
+  CorrectAnswer: 4
+  AnswerTests: omnitest(correctVal='4')
+  Hint: "Cerradinho, Cerradão, Mata de galeria e Brejo. O resto é maiúscula, espaço no fim, acento faltando, a linha vazia e a linha TOTAL."
+
+- Class: cmd_question
+  Output: "Uma padronização simples resolve parte disso. Digite table(trimws(tolower(coleta$ponto))), que tira os espaços das pontas e põe tudo em minúsculas."
+  CorrectAnswer: table(trimws(tolower(coleta$ponto)))
+  AnswerTests: omnitest(correctExpr='table(trimws(tolower(coleta$ponto)))')
+  Hint: "Digite table(trimws(tolower(coleta$ponto)))."
+
+- Class: text
+  Output: "Melhorou, mas 'cerradão' e 'cerradao' continuam separados: acento não é espaço nem maiúscula. A lição prática é outra, e vale para o campo: em vez de digitar o nome do ponto a cada linha, use uma lista fechada de valores (no Excel, validação de dados; no R, um fator com níveis definidos)."
+
+- Class: cmd_question
+  Output: "O mesmo problema aparece nos nomes das espécies. Liste-os com unique(coleta$especie)."
+  CorrectAnswer: unique(coleta$especie)
+  AnswerTests: omnitest(correctExpr='unique(coleta$especie)')
+  Hint: "Digite unique(coleta$especie)."
+
+- Class: mult_question
+  Output: "Além das abreviações e do espaço duplo, há 'Boana albopunctata' e 'Hypsiboas albopunctatus' na mesma planilha. O que são esses dois nomes?"
+  AnswerChoices: A mesma espécie, com o nome antigo e o atual;Duas espécies diferentes do mesmo gênero;Um erro de digitação
+  CorrectAnswer: A mesma espécie, com o nome antigo e o atual
+  AnswerTests: omnitest(correctVal='A mesma espécie, com o nome antigo e o atual')
+  Hint: "É um caso de sinonímia taxonômica. Por isso a planilha precisa registrar qual catálogo e qual data você usou para os nomes."
+
+- Class: cmd_question
+  Output: "Agora o sexo dos animais. Conte os valores com table(coleta$sexo, useNA = 'ifany')."
+  CorrectAnswer: table(coleta$sexo, useNA = 'ifany')
+  AnswerTests: usa('table')
+  Hint: "Digite table(coleta$sexo, useNA = 'ifany')."
+
+- Class: text
+  Output: "Onze categorias para uma variável que tem dois valores possíveis: M, m, macho, F, f, fêmea, 1, 2, o ponto de interrogação, o M/F que sobrou do cabeçalho e as células vazias. Ninguém faz isso de propósito; acontece quando três pessoas preenchem a mesma planilha sem combinar nada antes."
+
+- Class: cmd_question
+  Output: "Linhas repetidas são outro clássico. Conte-as com sum(duplicated(coleta))."
+  CorrectAnswer: sum(duplicated(coleta))
+  AnswerTests: omnitest(correctExpr='sum(duplicated(coleta))')
+  Hint: "Digite sum(duplicated(coleta))."
+
+- Class: text
+  Output: "São duas: uma linha de dados de Scinax fuscovarius que aparece duas vezes e uma das linhas em branco que separam os pontos. Repare que o duplicated() conta as duas do mesmo jeito, e que as linhas em branco existem só porque alguém queria deixar a planilha bonita na tela."
+
+- Class: cmd_question
+  Output: "Falta a data. Veja os formatos com unique(coleta$data)."
+  CorrectAnswer: unique(coleta$data)
+  AnswerTests: omnitest(correctExpr='unique(coleta$data)')
+  Hint: "Digite unique(coleta$data)."
+
+- Class: mult_question
+  Output: "Aparecem 12/03/2019, 12-mar, 2019.03.12, 13-mar-19, 15/3/19 e 2019-03-14. Qual desses formatos você deve usar?"
+  AnswerChoices: 2019-03-14, o padrão ISO 8601;12/03/2019, que é como se escreve no Brasil;Tanto faz, o R entende todos
+  CorrectAnswer: 2019-03-14, o padrão ISO 8601
+  AnswerTests: omnitest(correctVal='2019-03-14, o padrão ISO 8601')
+  Hint: "Só um deles ordena corretamente quando lido como texto e não depende de saber se o mês vem antes do dia."
+
+- Class: mult_question
+  Output: "E o que fazer com as células que dizem '-', '?', 'n/a' e 'sem dados'?"
+  AnswerChoices: Deixar a célula vazia ou escrever NA, e explicar o motivo nos metadados;Preencher com zero;Preencher com a média da coluna
+  CorrectAnswer: Deixar a célula vazia ou escrever NA, e explicar o motivo nos metadados
+  AnswerTests: omnitest(correctVal='Deixar a célula vazia ou escrever NA, e explicar o motivo nos metadados')
+  Hint: "Zero é um valor medido. Ausente é ausente, e o motivo da ausência é informação que só você tem."
+
+- Class: mult_question
+  Output: "A planilha original ainda tem três abas além dos dados: uma com um gráfico colado, uma com anotações de campo e uma vazia. Uma dessas anotações é a senha de um drive. O que fazer?"
+  AnswerChoices: Dados numa aba só, anotações viram metadados, e a senha sai do arquivo;Apagar as três abas;Deixar como está, porque é o registro do trabalho
+  CorrectAnswer: Dados numa aba só, anotações viram metadados, e a senha sai do arquivo
+  AnswerTests: omnitest(correctVal='Dados numa aba só, anotações viram metadados, e a senha sai do arquivo')
+  Hint: "As anotações são valiosas: o termômetro quebrado no dia 14 explica dados faltantes. Elas só estão no lugar errado."
+
+- Class: text
+  Output: "Agora o outro lado. Guardei em dados o arquivo anuros_altitude.csv, que vem do material suplementar do Bovo et al. (2023) e é o mesmo que usamos nas outras aulas. Ele acerta quase tudo: uma observação por linha, uma variável por coluna, um valor por célula e ausentes marcados como NA de verdade."
+
+- Class: cmd_question
+  Output: "Conte os ausentes de cada coluna com colSums(is.na(dados))."
+  CorrectAnswer: colSums(is.na(dados))
+  AnswerTests: omnitest(correctExpr='colSums(is.na(dados))')
+  Hint: "Digite colSums(is.na(dados))."
+
+- Class: mult_question
+  Output: "São 35 ausentes em CTmax e 107 em Sex, de 225 animais. O que esses números mudam na sua análise?"
+  AnswerChoices: Qualquer modelo com Sex vai usar menos da metade dos animais;Nada, porque o R ignora NA sozinho;Só mudam se forem mais de 50% em todas as colunas
+  CorrectAnswer: Qualquer modelo com Sex vai usar menos da metade dos animais
+  AnswerTests: omnitest(correctVal='Qualquer modelo com Sex vai usar menos da metade dos animais')
+  Hint: "O lm() descarta a linha inteira quando falta um valor em qualquer variável do modelo."
+
+- Class: text
+  Output: "O arquivo também traz duas colunas derivadas: Tbr, que deveria ser CTmax menos CTmin, e WT, que deveria ser CTmax menos BIO_5."
+
+- Class: cmd_question
+  Output: "Confira a primeira com all.equal(dados$Tbr, dados$CTmax - dados$CTmin)."
+  CorrectAnswer: all.equal(dados$Tbr, dados$CTmax - dados$CTmin)
+  AnswerTests: omnitest(correctExpr='all.equal(dados$Tbr, dados$CTmax - dados$CTmin)')
+  Hint: "Digite all.equal(dados$Tbr, dados$CTmax - dados$CTmin)."
+
+- Class: text
+  Output: "O all.equal() não devolveu TRUE: há uma diferença relativa média de cerca de 7 em 100 mil. Ela vem de arredondamento, e não de erro grosseiro, mas mostra o ponto: a coluna guardada e a conta que a gerou já não são a mesma coisa. Coluna derivada boa é a que o script recalcula, como fizemos na aula 04."
+
+- Class: cmd_question
+  Output: "Agora um problema de estrutura. Calcule o desvio-padrão de BIO_5 dentro de cada altitude com tapply(dados$BIO_5, dados$Altitude_m, sd)."
+  CorrectAnswer: tapply(dados$BIO_5, dados$Altitude_m, sd)
+  AnswerTests: omnitest(correctExpr='tapply(dados$BIO_5, dados$Altitude_m, sd)')
+  Hint: "Digite tapply(dados$BIO_5, dados$Altitude_m, sd)."
+
+- Class: mult_question
+  Output: "Todos os desvios são zero. O que isso diz sobre BIO_5?"
+  AnswerChoices: É uma variável do sítio, repetida em todas as linhas de indivíduos daquele sítio;Que os animais do mesmo sítio têm a mesma temperatura corporal;Que a coluna foi preenchida errado
+  CorrectAnswer: É uma variável do sítio, repetida em todas as linhas de indivíduos daquele sítio
+  AnswerTests: omnitest(correctVal='É uma variável do sítio, repetida em todas as linhas de indivíduos daquele sítio')
+  Hint: "São duas tabelas amassadas numa só: uma de indivíduos e uma de sítios. Guarde isso, porque na aula 06 ela vira um problema de pseudorreplicação."
+
+- Class: cmd_question
+  Output: "Há ainda uma redundância. Cruze as duas colunas de altitude com table(dados$Altitude_categorical, dados$Altitude_m)."
+  CorrectAnswer: table(dados$Altitude_categorical, dados$Altitude_m)
+  AnswerTests: omnitest(correctExpr='table(dados$Altitude_categorical, dados$Altitude_m)')
+  Hint: "Digite table(dados$Altitude_categorical, dados$Altitude_m)."
+
+- Class: text
+  Output: "Cada categoria corresponde a uma única altitude, porque Altitude_categorical é a serra e a altitude coladas num texto só. Ela não acrescenta informação a Mountain_Range mais Altitude_m, e ainda esconde duas variáveis dentro de uma célula."
+
+- Class: mult_question
+  Output: "A coluna EWL_Ugcm2s1 está em microgramas por centímetro quadrado por segundo. Onde essa informação deveria estar?"
+  AnswerChoices: Num arquivo de metadados que acompanha os dados;No nome da coluna, como está;Numa linha extra abaixo do cabeçalho
+  CorrectAnswer: Num arquivo de metadados que acompanha os dados
+  AnswerTests: omnitest(correctVal='Num arquivo de metadados que acompanha os dados')
+  Hint: "Os metadados dizem, para cada variável, o que ela é, em que unidade está e como foi medida. No repositório da disciplina isso está em dados/metadados_anuros_altitude.md."
+
+- Class: mult_question
+  Output: "Última: seu script começa com setwd('/Users/diogo/Documents/tese/analises'). Por que isso é um problema?"
+  AnswerChoices: O caminho só existe no seu computador, então o script quebra em qualquer outro;Porque setwd() é uma função lenta;Não é problema nenhum
+  CorrectAnswer: O caminho só existe no seu computador, então o script quebra em qualquer outro
+  AnswerTests: omnitest(correctVal='O caminho só existe no seu computador, então o script quebra em qualquer outro')
+  Hint: "Use um Projeto do RStudio e caminhos relativos, ou here::here(), e o script roda na sua máquina, na do revisor e daqui a cinco anos."
+
+- Class: text
+  Output: "Pronto! Você auditou as duas tabelas. A planilha ruim tinha problemas de nome de arquivo, cabeçalho, tipos, categorias, duplicatas, datas e ausentes; o arquivo publicado, que é bem melhor, ainda tem coluna derivada guardada, variável de sítio repetida e redundância entre colunas. Nenhum dos dois é caso perdido: o que muda é quanto trabalho sobra para o script da aula 04."
