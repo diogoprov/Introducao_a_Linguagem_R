@@ -1,0 +1,398 @@
+- Class: meta
+  Course: Introducao a Linguagem R
+  Lesson: Primeiros Passos em Bioestatistica
+  Author: Diogo B. Provete
+  Type: Standard
+  Organization: UFMS
+  Version: 2.4.5
+
+- Class: text
+  Output: "Bem-vindo(a)! Esta lição acompanha as aulas 03 e 04 de Bioestatística: organização e apresentação de dados, e medidas de tendência central e dispersão. Não precisa saber nada de R. Você vai digitar comandos no console e eu vou conferindo cada resposta. Leva uns 30 minutos."
+
+- Class: text
+  Output: "Quando aparecer o sinal '>' e ... no fim do texto, é a sua vez de digitar. Quando aparecer só '...', aperte Enter para seguir. Se travar, digite skip() para pular uma pergunta, ou bye() para sair e continuar depois de onde parou."
+
+- Class: text
+  Output: "O R É UMA CALCULADORA. Vamos começar pelo mais simples."
+
+- Class: cmd_question
+  Output: "Digite 2 + 3 e aperte Enter."
+  CorrectAnswer: 2 + 3
+  AnswerTests: resulta('5')
+  Hint: "Digite exatamente 2 + 3 e aperte Enter."
+
+- Class: cmd_question
+  Output: "Potências usam o acento circunflexo. Calcule 2 elevado a 10."
+  CorrectAnswer: 2^10
+  AnswerTests: resulta('1024')
+  Hint: "Digite 2^10. Se o R reclamar de um caractere estranho, é o teclado com acentuação: tecle ^ e depois espaço."
+
+- Class: cmd_question
+  Output: "No R, o separador decimal é o ponto, não a vírgula. Calcule 38.5 menos 36.2."
+  CorrectAnswer: 38.5 - 36.2
+  AnswerTests: resulta('2.3')
+  Hint: "Digite 38.5 - 36.2, com ponto."
+
+- Class: cmd_question
+  Output: "Agora a sua primeira função. Funções têm nome e parênteses, e o que vai dentro dos parênteses é o argumento. A raiz quadrada é sqrt(). Calcule a raiz quadrada de 144."
+  CorrectAnswer: sqrt(144)
+  AnswerTests: resulta('12')
+  Hint: "Digite sqrt(144)."
+
+- Class: text
+  Output: "OBJETOS. Até aqui o R calculou e esqueceu. Para guardar um resultado, usamos a seta <- (sinal de menor seguido de hífen). O que está à direita é guardado no nome que está à esquerda. No RStudio, o atalho é Alt + - (Option + - no Mac)."
+
+- Class: text
+  Output: "Lembra da atividade do efeito do mutante, na aula 04? O número de ovos em 7 ninhos de uma ave foi 4, 5, 5, 6, 7, 7 e 7. A função c() junta valores num vetor, que é uma sequência de dados do mesmo tipo."
+
+- Class: cmd_question
+  Output: "Guarde os sete valores no objeto ovos: ovos <- c(4, 5, 5, 6, 7, 7, 7)"
+  CorrectAnswer: ovos <- c(4, 5, 5, 6, 7, 7, 7)
+  AnswerTests: vale('ovos', 'c(4, 5, 5, 6, 7, 7, 7)')
+  Hint: "Digite ovos <- c(4, 5, 5, 6, 7, 7, 7). As vírgulas aqui separam os valores; não são decimais."
+
+- Class: text
+  Output: "Repare que nada foi impresso. A atribuição guarda em silêncio. O objeto ovos agora existe na memória e aparece na aba Environment do RStudio."
+
+- Class: cmd_question
+  Output: "Para ver o que está guardado, basta digitar o nome do objeto. Veja ovos."
+  CorrectAnswer: ovos
+  AnswerTests: resulta('c(4, 5, 5, 6, 7, 7, 7)')
+  Hint: "Digite só ovos e aperte Enter."
+
+- Class: text
+  Output: "TENDÊNCIA CENTRAL. A média é a soma dos valores dividida pelo número de valores. Vamos calculá-la à mão primeiro."
+
+- Class: cmd_question
+  Output: "Some os valores com sum(ovos)."
+  CorrectAnswer: sum(ovos)
+  AnswerTests: resulta('41')
+  Hint: "Digite sum(ovos)."
+
+- Class: cmd_question
+  Output: "E conte quantos valores há com length(ovos)."
+  CorrectAnswer: length(ovos)
+  AnswerTests: resulta('7')
+  Hint: "Digite length(ovos)."
+
+- Class: cmd_question
+  Output: "Agora divida uma coisa pela outra: sum(ovos) / length(ovos)"
+  CorrectAnswer: sum(ovos) / length(ovos)
+  AnswerTests: resulta('41 / 7')
+  Hint: "Digite sum(ovos) / length(ovos)."
+
+- Class: cmd_question
+  Output: "O R já tem uma função para isso, mean(). Calcule a média de ovos com ela."
+  CorrectAnswer: mean(ovos)
+  AnswerTests: resulta('41 / 7')
+  Hint: "Digite mean(ovos). Deve dar o mesmo 5,857 que você calculou à mão."
+
+- Class: cmd_question
+  Output: "A mediana é o valor do meio, com os dados ordenados. Calcule com median(ovos)."
+  CorrectAnswer: median(ovos)
+  AnswerTests: resulta('6')
+  Hint: "Digite median(ovos)."
+
+- Class: cmd_question
+  Output: "E a moda, o valor mais frequente? O R não tem função pronta, mas table() conta quantas vezes cada valor aparece. Rode table(ovos)."
+  CorrectAnswer: table(ovos)
+  AnswerTests: resulta('table(ovos)')
+  Hint: "Digite table(ovos)."
+
+- Class: mult_question
+  Output: "Na saída de table(), a linha de cima são os valores e a de baixo, quantas vezes cada um aparece. Qual é a moda?"
+  AnswerChoices: 7;3;6
+  CorrectAnswer: 7
+  AnswerTests: omnitest(correctVal='7')
+  Hint: "Procure o maior número na linha de baixo e veja qual valor está em cima dele. O 3 é a frequência, não o valor."
+
+- Class: text
+  Output: "Agora o mutante: apareceu um oitavo ninho, com 15 ovos. Para acrescentar um valor a um vetor, use c() de novo, juntando o vetor antigo e o valor novo."
+
+- Class: cmd_question
+  Output: "Crie o objeto ovos2 com os oito ninhos: ovos2 <- c(ovos, 15)"
+  CorrectAnswer: ovos2 <- c(ovos, 15)
+  AnswerTests: vale('ovos2', 'c(4, 5, 5, 6, 7, 7, 7, 15)')
+  Hint: "Digite ovos2 <- c(ovos, 15)."
+
+- Class: cmd_question
+  Output: "Calcule a média de ovos2."
+  CorrectAnswer: mean(ovos2)
+  AnswerTests: resulta('7')
+  Hint: "Digite mean(ovos2)."
+
+- Class: cmd_question
+  Output: "E a mediana de ovos2."
+  CorrectAnswer: median(ovos2)
+  AnswerTests: resulta('6.5')
+  Hint: "Digite median(ovos2). Com um número par de valores, a mediana é a média dos dois do meio."
+
+- Class: mult_question
+  Output: "Com o ninho de 15 ovos, a média foi de 5,86 para 7 e a mediana, de 6 para 6,5. Qual das duas mudou mais?"
+  AnswerChoices: A média, porque usa o valor de cada dado, inclusive o extremo;A mediana, porque depende da ordem dos dados;As duas mudaram igual
+  CorrectAnswer: A média, porque usa o valor de cada dado, inclusive o extremo
+  AnswerTests: omnitest(correctVal='A média, porque usa o valor de cada dado, inclusive o extremo')
+  Hint: "A média subiu mais de 1 ovo; a mediana, meio ovo. Para a mediana, o 15 só conta como 'o maior valor', seja ele 8 ou 1000."
+
+- Class: text
+  Output: "DISPERSÃO. A média sozinha não diz se os valores estão perto ou longe uns dos outros. Para isso olhamos os desvios: a distância de cada valor até a média."
+
+- Class: cmd_question
+  Output: "Calcule os desvios e guarde em desvios: desvios <- ovos - mean(ovos)"
+  CorrectAnswer: desvios <- ovos - mean(ovos)
+  AnswerTests: vale('desvios', 'ovos - mean(ovos)')
+  Hint: "Digite desvios <- ovos - mean(ovos)."
+
+- Class: text
+  Output: "Repare que você subtraiu um número de um vetor inteiro de uma vez: o R fez a conta para cada um dos sete ninhos. Digite desvios depois da lição, se quiser ver os sete valores."
+
+- Class: cmd_question
+  Output: "Some os desvios: sum(desvios)"
+  CorrectAnswer: sum(desvios)
+  AnswerTests: resulta('sum(desvios)')
+  Hint: "Digite sum(desvios)."
+
+- Class: mult_question
+  Output: "Deu um número como 2.66e-15, em notação científica: 0,00000000000000266. O que isso quer dizer?"
+  AnswerChoices: É zero, a menos de um erro de arredondamento do computador, porque os desvios positivos anulam os negativos;Os dados quase não variam;O R errou a conta
+  CorrectAnswer: É zero, a menos de um erro de arredondamento do computador, porque os desvios positivos anulam os negativos
+  AnswerTests: omnitest(correctVal='É zero, a menos de um erro de arredondamento do computador, porque os desvios positivos anulam os negativos')
+  Hint: "A soma dos desvios em relação à média é sempre zero, para qualquer conjunto de dados. Por isso ela não serve para medir dispersão."
+
+- Class: cmd_question
+  Output: "Por isso elevamos os desvios ao quadrado antes de somar. Calcule a soma dos quadrados: sum(desvios^2)"
+  CorrectAnswer: sum(desvios^2)
+  AnswerTests: resulta('sum((ovos - mean(ovos))^2)')
+  Hint: "Digite sum(desvios^2)."
+
+- Class: cmd_question
+  Output: "A variância da amostra é a soma dos quadrados dividida pelos graus de liberdade, n - 1. Calcule: sum(desvios^2) / (length(ovos) - 1)"
+  CorrectAnswer: sum(desvios^2) / (length(ovos) - 1)
+  AnswerTests: resulta('var(ovos)')
+  Hint: "Digite sum(desvios^2) / (length(ovos) - 1). Os parênteses em volta de length(ovos) - 1 são necessários: sem eles, o R divide primeiro e subtrai depois."
+
+- Class: cmd_question
+  Output: "Confira com a função pronta: var(ovos)"
+  CorrectAnswer: var(ovos)
+  AnswerTests: resulta('var(ovos)')
+  Hint: "Digite var(ovos). Deve dar o mesmo 1,476."
+
+- Class: cmd_question
+  Output: "A variância está em ovos ao quadrado, uma unidade estranha. O desvio padrão é a raiz quadrada da variância e volta para a unidade dos dados. Calcule com sd(ovos), de standard deviation."
+  CorrectAnswer: sd(ovos)
+  AnswerTests: resulta('sqrt(var(ovos))')
+  Hint: "Digite sd(ovos). Dá o mesmo que sqrt(var(ovos)): 1,21 ovo."
+
+- Class: text
+  Output: "OS DADOS DA DISCIPLINA. Chega de ninhos. Deixei pronta a tabela anuros, com 225 anuros de 5 espécies coletados em 6 altitudes de duas serras da Mata Atlântica (Bovo et al. 2023). As colunas são especie, serra, altitude (em metros), massa (em gramas) e ctmax: a temperatura crítica máxima, em graus Celsius, em que o animal perde a capacidade de se mover de forma coordenada."
+
+- Class: cmd_question
+  Output: "Veja as primeiras linhas da tabela com head(anuros)."
+  CorrectAnswer: head(anuros)
+  AnswerTests: usa('head')
+  Hint: "Digite head(anuros)."
+
+- Class: text
+  Output: "É o formato que você viu na aula 03: cada linha é uma observação (um animal), cada coluna é uma variável e cada célula guarda um único dado."
+
+- Class: cmd_question
+  Output: "Veja as dimensões da tabela com dim(anuros)."
+  CorrectAnswer: dim(anuros)
+  AnswerTests: resulta('dim(anuros)')
+  Hint: "Digite dim(anuros)."
+
+- Class: mult_question
+  Output: "O primeiro número de dim() é o de linhas, o segundo é o de colunas. Quantos animais há na tabela?"
+  AnswerChoices: 225;5;190
+  CorrectAnswer: 225
+  AnswerTests: omnitest(correctVal='225')
+  Hint: "Cada linha é um animal: é o primeiro número."
+
+- Class: text
+  Output: "Para pegar uma coluna, usamos o cifrão: anuros$ctmax é a coluna ctmax da tabela anuros. Ela é um vetor, como ovos, só que bem mais comprido."
+
+- Class: cmd_question
+  Output: "Calcule a média de CTmax: mean(anuros$ctmax)"
+  CorrectAnswer: mean(anuros$ctmax)
+  AnswerTests: resulta('mean(anuros$ctmax)')
+  Hint: "Digite mean(anuros$ctmax)."
+
+- Class: mult_question
+  Output: "O R devolveu NA. Por quê?"
+  AnswerChoices: Há animais sem CTmax medido, e a média de valores que incluem um desconhecido também é desconhecida;A coluna ctmax é texto;O nome da coluna está errado
+  CorrectAnswer: Há animais sem CTmax medido, e a média de valores que incluem um desconhecido também é desconhecida
+  AnswerTests: omnitest(correctVal='Há animais sem CTmax medido, e a média de valores que incluem um desconhecido também é desconhecida')
+  Hint: "NA quer dizer not available: um dado ausente. Se um dos valores é desconhecido, a soma também é."
+
+- Class: cmd_question
+  Output: "Quantos são? A função is.na() responde TRUE para cada valor ausente e FALSE para os outros. Como o R conta TRUE como 1 e FALSE como 0, basta somar: sum(is.na(anuros$ctmax))"
+  CorrectAnswer: sum(is.na(anuros$ctmax))
+  AnswerTests: resulta('35')
+  Hint: "Digite sum(is.na(anuros$ctmax))."
+
+- Class: text
+  Output: "São 35 animais sem CTmax. Para calcular sem eles, acrescente o argumento na.rm = TRUE, de NA remove. Dica: aperte a seta para cima no teclado para recuperar o comando anterior e só editar."
+
+- Class: cmd_question
+  Output: "Calcule a média de CTmax sem os NA: mean(anuros$ctmax, na.rm = TRUE)"
+  CorrectAnswer: mean(anuros$ctmax, na.rm = TRUE)
+  AnswerTests: resulta('mean(anuros$ctmax, na.rm = TRUE)')
+  Hint: "Digite mean(anuros$ctmax, na.rm = TRUE). O argumento vai dentro dos parênteses, separado por vírgula."
+
+- Class: cmd_question
+  Output: "Agora a mediana, também com na.rm = TRUE."
+  CorrectAnswer: median(anuros$ctmax, na.rm = TRUE)
+  AnswerTests: resulta('median(anuros$ctmax, na.rm = TRUE)')
+  Hint: "Digite median(anuros$ctmax, na.rm = TRUE)."
+
+- Class: text
+  Output: "A média deu 36,96 graus e a mediana, 38,2. A média ficou mais de um grau abaixo da mediana. Um gráfico ajuda a entender por quê."
+
+- Class: cmd_question
+  Output: "Faça um histograma de CTmax: hist(anuros$ctmax)"
+  CorrectAnswer: hist(anuros$ctmax)
+  AnswerTests: usa('hist')
+  Hint: "Digite hist(anuros$ctmax). O gráfico aparece na aba Plots. O hist() ignora os NA sozinho."
+
+- Class: mult_question
+  Output: "Como é a forma da distribuição?"
+  AnswerChoices: Assimétrica, com a maior parte dos animais entre 38 e 40 graus e uma cauda para os valores baixos;Simétrica, com a mesma quantidade de valores dos dois lados do pico;Assimétrica, com uma cauda para os valores altos
+  CorrectAnswer: Assimétrica, com a maior parte dos animais entre 38 e 40 graus e uma cauda para os valores baixos
+  AnswerTests: omnitest(correctVal='Assimétrica, com a maior parte dos animais entre 38 e 40 graus e uma cauda para os valores baixos')
+  Hint: "As barras mais altas estão à direita. À esquerda, as barras vão baixando até perto de 29 graus."
+
+- Class: text
+  Output: "É uma assimetria negativa, a cauda para a esquerda. Os animais com CTmax baixo puxam a média para baixo, como o ninho de 15 ovos puxou para cima. A mediana quase não se mexe. Quando a distribuição é assimétrica, a mediana descreve melhor o valor típico."
+
+- Class: cmd_question
+  Output: "Agora a dispersão. Veja o menor e o maior valor com range(anuros$ctmax, na.rm = TRUE)."
+  CorrectAnswer: range(anuros$ctmax, na.rm = TRUE)
+  AnswerTests: resulta('range(anuros$ctmax, na.rm = TRUE)')
+  Hint: "Digite range(anuros$ctmax, na.rm = TRUE)."
+
+- Class: cmd_question
+  Output: "A amplitude é a diferença entre o máximo e o mínimo. Calcule-a, digitando a conta com os dois números que apareceram."
+  CorrectAnswer: 40.6 - 28.7
+  AnswerTests: resulta('diff(range(anuros$ctmax, na.rm = TRUE))')
+  Hint: "Digite 40.6 - 28.7. Também vale max(anuros$ctmax, na.rm = TRUE) - min(anuros$ctmax, na.rm = TRUE)."
+
+- Class: text
+  Output: "A amplitude usa só os dois valores mais extremos, por isso é muito sensível a um único animal fora do comum. Os quartis resistem melhor."
+
+- Class: cmd_question
+  Output: "Calcule os quartis: quantile(anuros$ctmax, na.rm = TRUE)"
+  CorrectAnswer: quantile(anuros$ctmax, na.rm = TRUE)
+  AnswerTests: resulta('quantile(anuros$ctmax, na.rm = TRUE)')
+  Hint: "Digite quantile(anuros$ctmax, na.rm = TRUE)."
+
+- Class: mult_question
+  Output: "O quantile() mostra o mínimo (0%), o primeiro quartil (25%), a mediana (50%), o terceiro quartil (75%) e o máximo (100%). Qual valor é a mediana?"
+  AnswerChoices: 38,2;34,85;38,875
+  CorrectAnswer: "38,2"
+  AnswerTests: omnitest(correctVal='38,2')
+  Hint: "A mediana é o quantil de 50%: metade dos animais tem CTmax abaixo dela."
+
+- Class: cmd_question
+  Output: "A distância interquartílica é o terceiro quartil menos o primeiro: a largura da faixa onde estão os 50% centrais dos dados. Calcule com IQR(anuros$ctmax, na.rm = TRUE), de interquartile range."
+  CorrectAnswer: IQR(anuros$ctmax, na.rm = TRUE)
+  AnswerTests: resulta('IQR(anuros$ctmax, na.rm = TRUE)')
+  Hint: "Digite IQR(anuros$ctmax, na.rm = TRUE), com IQR em maiúsculas. Dá 38,875 menos 34,85."
+
+- Class: cmd_question
+  Output: "Agora a variância de CTmax."
+  CorrectAnswer: var(anuros$ctmax, na.rm = TRUE)
+  AnswerTests: resulta('var(anuros$ctmax, na.rm = TRUE)')
+  Hint: "Digite var(anuros$ctmax, na.rm = TRUE)."
+
+- Class: cmd_question
+  Output: "E o desvio padrão."
+  CorrectAnswer: sd(anuros$ctmax, na.rm = TRUE)
+  AnswerTests: resulta('sd(anuros$ctmax, na.rm = TRUE)')
+  Hint: "Digite sd(anuros$ctmax, na.rm = TRUE)."
+
+- Class: text
+  Output: "O desvio padrão é de 2,6 graus. Mas 2,6 é muito ou pouco? Depende do tamanho da média. O coeficiente de variação, ou CV, responde isso: é o desvio padrão dividido pela média, em geral multiplicado por 100 para ficar em porcentagem."
+
+- Class: cmd_question
+  Output: "Calcule o CV de CTmax e guarde em cv_ctmax: cv_ctmax <- sd(anuros$ctmax, na.rm = TRUE) / mean(anuros$ctmax, na.rm = TRUE) * 100"
+  CorrectAnswer: cv_ctmax <- sd(anuros$ctmax, na.rm = TRUE) / mean(anuros$ctmax, na.rm = TRUE) * 100
+  AnswerTests: vale('cv_ctmax', 'sd(anuros$ctmax, na.rm = TRUE) / mean(anuros$ctmax, na.rm = TRUE) * 100')
+  Hint: "Digite cv_ctmax <- sd(anuros$ctmax, na.rm = TRUE) / mean(anuros$ctmax, na.rm = TRUE) * 100. Use a seta para cima para aproveitar o comando do sd()."
+
+- Class: cmd_question
+  Output: "Agora o CV da massa corporal, em cv_massa. A coluna massa não tem NA, então não precisa do na.rm: cv_massa <- sd(anuros$massa) / mean(anuros$massa) * 100"
+  CorrectAnswer: cv_massa <- sd(anuros$massa) / mean(anuros$massa) * 100
+  AnswerTests: vale('cv_massa', 'sd(anuros$massa) / mean(anuros$massa) * 100')
+  Hint: "Digite cv_massa <- sd(anuros$massa) / mean(anuros$massa) * 100."
+
+- Class: cmd_question
+  Output: "Veja os dois CVs lado a lado: c(cv_ctmax, cv_massa)"
+  CorrectAnswer: c(cv_ctmax, cv_massa)
+  AnswerTests: resulta('c(cv_ctmax, cv_massa)')
+  Hint: "Digite c(cv_ctmax, cv_massa)."
+
+- Class: mult_question
+  Output: "O desvio padrão de CTmax está em graus e o da massa, em gramas: não dá para comparar os dois diretamente. Com o CV, que não tem unidade, dá. O que os CVs mostram?"
+  AnswerChoices: A massa varia muito mais que o CTmax em relação à própria média, 122% contra 7%;O CTmax varia mais que a massa;Os dois variam igual
+  CorrectAnswer: A massa varia muito mais que o CTmax em relação à própria média, 122% contra 7%
+  AnswerTests: omnitest(correctVal='A massa varia muito mais que o CTmax em relação à própria média, 122% contra 7%')
+  Hint: "O CV da massa passa de 100%: o desvio padrão é maior que a própria média. Faz sentido, porque há desde pererequinhas de menos de 1 grama até sapos-cururus de mais de 300."
+
+- Class: text
+  Output: "COMPARANDO GRUPOS. Até aqui misturamos as 5 espécies. O boxplot, da aula 04, mostra a mediana, os quartis e os valores discrepantes de cada grupo lado a lado."
+
+- Class: cmd_question
+  Output: "Faça um boxplot de CTmax por espécie: boxplot(ctmax ~ especie, data = anuros)"
+  CorrectAnswer: boxplot(ctmax ~ especie, data = anuros)
+  AnswerTests: usa('boxplot')
+  Hint: "Digite boxplot(ctmax ~ especie, data = anuros). O til (~) se lê 'em função de'. Se alguns nomes de espécie não aparecerem no eixo, aumente a aba Plots: o R esconde nomes que se sobrepõem."
+
+- Class: text
+  Output: "Em cada caixa, a linha grossa é a mediana, as bordas são o primeiro e o terceiro quartis, e a altura da caixa é a distância interquartílica. Os pontos soltos são valores discrepantes."
+
+- Class: mult_question
+  Output: "Qual espécie tem o CTmax mais baixo?"
+  AnswerChoices: Dendropsophus minutus;Rhinella icterica;Boana faber
+  CorrectAnswer: Dendropsophus minutus
+  AnswerTests: omnitest(correctVal='Dendropsophus minutus')
+  Hint: "Procure a caixa mais baixa. A mediana dela fica perto de 34 graus; as das outras espécies, entre 35 e 39."
+
+- Class: text
+  Output: "D. minutus e Physalaemus cuvieri formam a cauda da esquerda que você viu no histograma. O boxplot mostra o que o histograma escondia: parte da variação em CTmax é diferença entre espécies."
+
+- Class: text
+  Output: "TABELAS DE FREQUÊNCIA. Para uma variável qualitativa, como a espécie, não existe média. Resumimos contando quantas vezes cada categoria aparece."
+
+- Class: cmd_question
+  Output: "Conte os animais de cada espécie: table(anuros$especie)"
+  CorrectAnswer: table(anuros$especie)
+  AnswerTests: resulta('table(anuros$especie)')
+  Hint: "Digite table(anuros$especie)."
+
+- Class: cmd_question
+  Output: "Essas são as frequências absolutas. Para as frequências relativas, as proporções, passe a tabela para prop.table(): prop.table(table(anuros$especie))"
+  CorrectAnswer: prop.table(table(anuros$especie))
+  AnswerTests: resulta('prop.table(table(anuros$especie))')
+  Hint: "Digite prop.table(table(anuros$especie)). Uma função pode ir dentro da outra: o R resolve primeiro a de dentro."
+
+- Class: mult_question
+  Output: "Qual espécie é a moda, a categoria mais frequente, e que proporção dos animais ela representa?"
+  AnswerChoices: Dendropsophus minutus, com 26%;Rhinella icterica, com 22%;Boana faber, com 20%
+  CorrectAnswer: Dendropsophus minutus, com 26%
+  AnswerTests: omnitest(correctVal='Dendropsophus minutus, com 26%')
+  Hint: "Procure a maior proporção: 0,262 quer dizer 26,2%."
+
+- Class: cmd_question
+  Output: "Por fim, a tabela de contingência da aula 03, que cruza duas variáveis qualitativas: table(anuros$especie, anuros$serra)"
+  CorrectAnswer: table(anuros$especie, anuros$serra)
+  AnswerTests: resulta('table(anuros$especie, anuros$serra)')
+  Hint: "Digite table(anuros$especie, anuros$serra). A primeira variável vai nas linhas e a segunda, nas colunas."
+
+- Class: text
+  Output: "Cada célula conta os animais de uma espécie numa serra. É o tipo de tabela que o teste de qui-quadrado analisa, como você vai ver mais adiante na disciplina."
+
+- Class: text
+  Output: "Resumo. Tendência central: mean() e median(); a moda sai de table(). Dispersão: range(), quantile(), IQR(), var(), sd(), e o CV feito à mão. Com dados ausentes, na.rm = TRUE. Gráficos: hist() para uma variável, boxplot(y ~ grupo) para comparar grupos. Variáveis qualitativas: table() e prop.table()."
+
+- Class: text
+  Output: "A próxima lição é Inferência por Simulação, depois das aulas 05 a 07. Bom trabalho!"

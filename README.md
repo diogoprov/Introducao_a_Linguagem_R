@@ -7,10 +7,11 @@ R dentro do próprio console. Acompanham a disciplina
 [Introdução à Linguagem R](https://provetelab.org/intro-r/) (PPGEC/UFMS) e usam
 o mesmo conjunto de dados das aulas práticas (anuros ao longo de gradientes
 altitudinais na Mata Atlântica; Bovo et al. 2023, *Integrative Organismal
-Biology* 5: obad009). As lições Inferência por Simulação e Testes como
-Modelos Lineares foram escritas para a graduação, acompanhando a disciplina
+Biology* 5: obad009). As lições Primeiros Passos em Bioestatística,
+Inferência por Simulação e Testes como Modelos Lineares foram escritas para a
+graduação, acompanhando a disciplina
 [Bioestatística](https://provetelab.org/bioestatistica/) (Ciências
-Biológicas/UFMS); pedem só a lição Primeiros Passos antes.
+Biológicas/UFMS); a primeira parte do zero e não pede nenhuma lição da pós.
 
 | Lição | Aula | Conteúdo |
 |---|---|---|
@@ -19,6 +20,7 @@ Biológicas/UFMS); pedem só a lição Primeiros Passos antes.
 | Manuseio de Dados com dplyr | 04 | pipe (`\|>` e `%>%`), `rename()`, `select()`, `mutate()`, `filter()`, `group_by()` + `summarise()`, `count()` |
 | Modelos Lineares | 06 | ciclo PPDAC: desenho amostral, exploração, `lm()`, diagnose com `plot()` e `performance`, interpretação com `anova()` e `broom` |
 | Rudimentos de Programação | 07 | funções, argumento padrão, escopo, `if`/`ifelse`/`for`, `purrr::map` e `map_dbl`, um modelo por espécie com `split()` + `map()` e `broom` |
+| Primeiros Passos em Bioestatística | Bioestatística 03–04 | R como calculadora, objetos com `<-`, vetores; média e mediana (e o efeito de um valor extremo), moda com `table()`; desvios, soma dos quadrados, `var()`, `sd()`, `range()`, `quantile()`, `IQR()`, coeficiente de variação à mão; `na.rm = TRUE`; `hist()` e `boxplot(y ~ grupo)`; `table()` e `prop.table()`, tabela de contingência |
 | Inferência por Simulação | Bioestatística 05–07 | população conhecida e `sample()`, distribuição amostral com `replicate()`, Teorema do Limite Central, erro padrão e tamanho da amostra, cobertura do IC de 95% (e como ela falha com n pequeno), valor-p por permutação comparado com `t.test()`, significância estatística × relevância biológica |
 | Testes como Modelos Lineares | Bioestatística 08–11 | `lm(y ~ 1)` é a média; regressão e correlação (`cor.test()` = inclinação padronizada); teste t como `lm()` com x 0/1 (t e p idênticos); ANOVA com `lm()` e `aov()`, F = t² com dois grupos; qui-quadrado como `glm()` de Poisson (Rao = X² de Pearson) |
 

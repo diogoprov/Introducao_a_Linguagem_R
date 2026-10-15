@@ -129,7 +129,7 @@
   Output: "Crie a coluna x, que vale 1 para o sapo-cururu e 0 para o sapo-ferreiro: duas$x <- as.numeric(duas$especie == 'Rhinella icterica')"
   CorrectAnswer: duas$x <- as.numeric(duas$especie == 'Rhinella icterica')
   AnswerTests: vale('duas$x', "as.numeric(duas$especie == 'Rhinella icterica')")
-  Hint: "Digite duas$x <- as.numeric(duas$especie == 'Rhinella icterica'). A comparação dá TRUE ou FALSE, e as.numeric() troca por 1 ou 0, como na lição Primeiros Passos."
+  Hint: "Digite duas$x <- as.numeric(duas$especie == 'Rhinella icterica'). A comparação dá TRUE ou FALSE, e as.numeric() troca por 1 ou 0: o R conta TRUE como 1 e FALSE como 0, como no sum(is.na()) da primeira lição."
 
 - Class: cmd_question
   Output: "Faça o gráfico de CTmax em função de x: plot(ctmax ~ x, data = duas)"

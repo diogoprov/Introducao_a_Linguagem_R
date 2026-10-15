@@ -10,7 +10,7 @@
   Output: "Bem-vindo(a)! Esta lição acompanha as aulas de estimativa e teste de hipóteses de Bioestatística. Em vez de decorar fórmulas, você vai sortear amostras milhares de vezes e ver com os próprios olhos o que são erro padrão, intervalo de confiança e valor-p. Leva uns 35 minutos."
 
 - Class: text
-  Output: "Ela supõe que você já fez a lição Primeiros Passos: sabe criar objetos com <-, usar mean() e pegar uma coluna com $."
+  Output: "Ela supõe que você já fez a lição Primeiros Passos em Bioestatística (ou a Primeiros Passos, da pós): sabe criar objetos com <-, usar mean() e pegar uma coluna com $."
 
 - Class: text
   Output: "Deixei pronto o objeto ctmax: a temperatura crítica máxima, em graus Celsius, de 190 anuros da Mata Atlântica. É a temperatura em que o animal perde a capacidade de se mover de forma coordenada."
