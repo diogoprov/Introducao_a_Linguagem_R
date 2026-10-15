@@ -1,0 +1,354 @@
+- Class: meta
+  Course: Introducao a Linguagem R
+  Lesson: Inferencia por Simulacao
+  Author: Diogo B. Provete
+  Type: Standard
+  Organization: UFMS
+  Version: 2.4.5
+
+- Class: text
+  Output: "Bem-vindo(a)! Esta lição acompanha as aulas de estimativa e teste de hipóteses de Bioestatística. Em vez de decorar fórmulas, você vai sortear amostras milhares de vezes e ver com os próprios olhos o que são erro padrão, intervalo de confiança e valor-p. Leva uns 35 minutos."
+
+- Class: text
+  Output: "Ela supõe que você já fez a lição Primeiros Passos: sabe criar objetos com <-, usar mean() e pegar uma coluna com $."
+
+- Class: text
+  Output: "Deixei pronto o objeto ctmax: a temperatura crítica máxima, em graus Celsius, de 190 anuros da Mata Atlântica. É a temperatura em que o animal perde a capacidade de se mover de forma coordenada."
+
+- Class: text
+  Output: "Nesta lição vamos fingir que esses 190 animais são a população inteira. Na vida real você nunca conhece a população; aqui conhecemos, e é isso que permite conferir se os métodos estatísticos acertam."
+
+- Class: cmd_question
+  Output: "Quantos valores há na população? Use length(ctmax)."
+  CorrectAnswer: length(ctmax)
+  AnswerTests: omnitest(correctExpr='length(ctmax)')
+  Hint: "Digite length(ctmax)."
+
+- Class: cmd_question
+  Output: "Calcule a média da população e guarde no objeto mu: mu <- mean(ctmax)"
+  CorrectAnswer: mu <- mean(ctmax)
+  AnswerTests: vale('mu', 'mean(ctmax)')
+  Hint: "Digite mu <- mean(ctmax)."
+
+- Class: text
+  Output: "mu é o parâmetro: um número fixo, que não muda. É ele que um pesquisador de verdade quer estimar sem nunca poder medir todos os animais."
+
+- Class: cmd_question
+  Output: "Antes de amostrar, olhe a forma da população com um histograma: hist(ctmax)"
+  CorrectAnswer: hist(ctmax)
+  AnswerTests: usa('hist')
+  Hint: "Digite hist(ctmax). O gráfico aparece na aba Plots."
+
+- Class: mult_question
+  Output: "A população tem a forma de sino da distribuição normal?"
+  AnswerChoices: "Não, é assimétrica, com um grupo de valores baixos à esquerda;Sim, é simétrica em torno da média;Não, todos os animais têm o mesmo valor"
+  CorrectAnswer: "Não, é assimétrica, com um grupo de valores baixos à esquerda"
+  AnswerTests: omnitest(correctVal='Não, é assimétrica, com um grupo de valores baixos à esquerda')
+  Hint: "Olhe as barras da esquerda. Os animais de Dendropsophus minutus têm CTmax bem mais baixo que os das outras espécies."
+
+- Class: text
+  Output: "Guarde essa forma na memória. Ela vai importar daqui a pouco."
+
+- Class: text
+  Output: "UMA AMOSTRA. Agora você é a pesquisadora que foi a campo e só conseguiu medir 10 animais. A função sample() sorteia valores de um vetor, sem repetir nenhum."
+
+- Class: cmd_question
+  Output: "Sorteie 10 animais e guarde no objeto amostra: amostra <- sample(ctmax, 10)"
+  CorrectAnswer: amostra <- sample(ctmax, 10)
+  AnswerTests: vetor_criado('amostra', 10)
+  Hint: "Digite amostra <- sample(ctmax, 10)."
+
+- Class: cmd_question
+  Output: "Calcule a média da sua amostra."
+  CorrectAnswer: mean(amostra)
+  AnswerTests: omnitest(correctExpr='mean(amostra)')
+  Hint: "Digite mean(amostra)."
+
+- Class: text
+  Output: "Essa média é a sua estimativa de mu. Ela deve ter ficado perto do valor de mu, mas não igual."
+
+- Class: cmd_question
+  Output: "Sorteie outra amostra de 10 e calcule a média dela de uma vez só: mean(sample(ctmax, 10))"
+  CorrectAnswer: mean(sample(ctmax, 10))
+  AnswerTests: usa('sample');usa('mean')
+  Hint: "Digite mean(sample(ctmax, 10)). O R faz primeiro o que está dentro dos parênteses."
+
+- Class: mult_question
+  Output: "Por que a segunda média saiu diferente da primeira?"
+  AnswerChoices: Cada amostra sorteia animais diferentes;Você digitou algo errado;A média da população mudou
+  CorrectAnswer: Cada amostra sorteia animais diferentes
+  AnswerTests: omnitest(correctVal='Cada amostra sorteia animais diferentes')
+  Hint: "mu continua o mesmo. O que mudou de um comando para o outro?"
+
+- Class: text
+  Output: "Essa variação de amostra para amostra se chama variação amostral. Toda estimativa a carrega, e boa parte da estatística existe para medir o tamanho dela."
+
+- Class: text
+  Output: "DISTRIBUIÇÃO AMOSTRAL. Uma média isolada não diz quão longe ela pode estar de mu. Para descobrir, vamos fazer o que nenhum pesquisador pode: repetir o estudo mil vezes."
+
+- Class: text
+  Output: "A função replicate(1000, ...) roda mil vezes o comando que vem depois da vírgula e junta os resultados num vetor."
+
+- Class: cmd_question
+  Output: "Guarde as médias de 1000 amostras de 10 animais no objeto medias10: medias10 <- replicate(1000, mean(sample(ctmax, 10)))"
+  CorrectAnswer: medias10 <- replicate(1000, mean(sample(ctmax, 10)))
+  AnswerTests: vetor_criado('medias10', 1000);usa('replicate')
+  Hint: "Digite medias10 <- replicate(1000, mean(sample(ctmax, 10)))."
+
+- Class: cmd_question
+  Output: "Faça o histograma dessas mil médias."
+  CorrectAnswer: hist(medias10)
+  AnswerTests: usa('hist')
+  Hint: "Digite hist(medias10)."
+
+- Class: mult_question
+  Output: "Compare com o histograma da população. O que mudou?"
+  AnswerChoices: As médias formam um sino quase simétrico, mesmo a população não sendo assim;As médias têm a mesma forma assimétrica da população;As médias se espalham tanto quanto os animais da população
+  CorrectAnswer: As médias formam um sino quase simétrico, mesmo a população não sendo assim
+  AnswerTests: omnitest(correctVal='As médias formam um sino quase simétrico, mesmo a população não sendo assim')
+  Hint: "Repare na forma e também nos valores do eixo x: eles cobrem uma faixa bem mais estreita que a da população."
+
+- Class: text
+  Output: "Este histograma tem nome: distribuição amostral da média. A forma de sino é o Teorema do Limite Central em ação: a média de muitos valores tende à distribuição normal, seja qual for a forma da população, desde que a amostra não seja pequena demais."
+
+- Class: cmd_question
+  Output: "Onde fica o centro da distribuição amostral? Calcule mean(medias10) e compare com mu."
+  CorrectAnswer: mean(medias10)
+  AnswerTests: omnitest(correctExpr='mean(medias10)')
+  Hint: "Digite mean(medias10)."
+
+- Class: text
+  Output: "Fica praticamente em cima de mu. Por isso a média amostral é chamada de estimador não viesado: ela erra, mas não erra sempre para o mesmo lado."
+
+- Class: cmd_question
+  Output: "Agora a largura. O desvio padrão das médias mede quanto uma média costuma se afastar de mu. Calcule sd(medias10)."
+  CorrectAnswer: sd(medias10)
+  AnswerTests: omnitest(correctExpr='sd(medias10)')
+  Hint: "Digite sd(medias10)."
+
+- Class: text
+  Output: "Esse número é o erro padrão da média. Você o obteve repetindo o estudo mil vezes. Na vida real há uma amostra só, e o erro padrão sai de uma fórmula: o desvio padrão dividido pela raiz quadrada de n."
+
+- Class: cmd_question
+  Output: "Aplique a fórmula usando o desvio padrão da população, para comparar com a simulação: sd(ctmax) / sqrt(10)"
+  CorrectAnswer: sd(ctmax) / sqrt(10)
+  AnswerTests: omnitest(correctExpr='sd(ctmax) / sqrt(10)')
+  Hint: "Digite sd(ctmax) / sqrt(10)."
+
+- Class: mult_question
+  Output: "O erro padrão da simulação, sd(medias10), e o da fórmula ficaram parecidos?"
+  AnswerChoices: Sim, diferem só por alguns centésimos;Não, um é o dobro do outro;Não, um deles é negativo
+  CorrectAnswer: Sim, diferem só por alguns centésimos
+  AnswerTests: omnitest(correctVal='Sim, diferem só por alguns centésimos')
+  Hint: "Os dois devem estar perto de 0,8. Role o console para cima e compare."
+
+- Class: text
+  Output: "A simulação e a fórmula contam a mesma história. A pequena diferença que sobra vem de sortearmos de uma população finita sem repor os animais; numa população grande ela some."
+
+- Class: text
+  Output: "TAMANHO DA AMOSTRA. E se a pesquisadora tivesse medido mais animais?"
+
+- Class: cmd_question
+  Output: "Repita a simulação com amostras de 40 animais e guarde no objeto medias40."
+  CorrectAnswer: medias40 <- replicate(1000, mean(sample(ctmax, 40)))
+  AnswerTests: vetor_criado('medias40', 1000);usa('replicate')
+  Hint: "É o mesmo comando de medias10, trocando o 10 por 40 e o nome do objeto: medias40 <- replicate(1000, mean(sample(ctmax, 40)))."
+
+- Class: cmd_question
+  Output: "Calcule o erro padrão com n = 40."
+  CorrectAnswer: sd(medias40)
+  AnswerTests: omnitest(correctExpr='sd(medias40)')
+  Hint: "Digite sd(medias40)."
+
+- Class: mult_question
+  Output: "Comparado com o erro padrão de n = 10, o de n = 40 ficou:"
+  AnswerChoices: Mais ou menos a metade;Igual;O dobro;Um quarto
+  CorrectAnswer: Mais ou menos a metade
+  AnswerTests: omnitest(correctVal='Mais ou menos a metade')
+  Hint: "Compare sd(medias40) com sd(medias10)."
+
+- Class: text
+  Output: "Quadruplicar a amostra só cortou o erro pela metade, porque n entra na fórmula dentro da raiz. Precisão custa caro: para dividir o erro por 10, é preciso medir 100 vezes mais animais."
+
+- Class: text
+  Output: "INTERVALO DE CONFIANÇA. Volte à realidade: uma amostra só e mu desconhecido. O intervalo de confiança de 95% é a estimativa mais ou menos um multiplicador vezes o erro padrão. Vamos montar um com 20 animais."
+
+- Class: cmd_question
+  Output: "Sorteie uma nova amostra, agora de 20 animais, e guarde em amostra."
+  CorrectAnswer: amostra <- sample(ctmax, 20)
+  AnswerTests: vetor_criado('amostra', 20)
+  Hint: "Digite amostra <- sample(ctmax, 20)."
+
+- Class: cmd_question
+  Output: "Calcule o erro padrão a partir da própria amostra e guarde em ep: ep <- sd(amostra) / sqrt(20)"
+  CorrectAnswer: ep <- sd(amostra) / sqrt(20)
+  AnswerTests: vale('ep', 'sd(amostra) / sqrt(20)')
+  Hint: "Digite ep <- sd(amostra) / sqrt(20). Repare que agora usamos sd(amostra), e não sd(ctmax): na vida real você só tem a amostra."
+
+- Class: cmd_question
+  Output: "O multiplicador para 95% vem da distribuição t de Student com n - 1 = 19 graus de liberdade. Guarde em mult: mult <- qt(0.975, df = 19)"
+  CorrectAnswer: mult <- qt(0.975, df = 19)
+  AnswerTests: vale('mult', 'qt(0.975, df = 19)')
+  Hint: "Digite mult <- qt(0.975, df = 19). O 0.975 deixa 2,5% em cada cauda."
+
+- Class: text
+  Output: "mult vale cerca de 2,09, um pouco mais que o 1,96 da distribuição normal. A t alarga o intervalo para compensar a incerteza extra de estimar o desvio padrão com só 20 animais."
+
+- Class: cmd_question
+  Output: "Calcule os dois limites do intervalo e guarde em ic: ic <- mean(amostra) + c(-1, 1) * mult * ep"
+  CorrectAnswer: ic <- mean(amostra) + c(-1, 1) * mult * ep
+  AnswerTests: vale('ic', 'mean(amostra) + c(-1, 1) * mult * ep')
+  Hint: "Digite ic <- mean(amostra) + c(-1, 1) * mult * ep. O c(-1, 1) faz o menos e o mais de uma vez só."
+
+- Class: cmd_question
+  Output: "Confira se o seu intervalo contém mu: ic[1] < mu & mu < ic[2]"
+  CorrectAnswer: ic[1] < mu & mu < ic[2]
+  AnswerTests: omnitest(correctExpr='ic[1] < mu & mu < ic[2]')
+  Hint: "Digite ic[1] < mu & mu < ic[2]. O & exige que as duas comparações sejam verdadeiras."
+
+- Class: text
+  Output: "Provavelmente deu TRUE. Mas pense: este intervalo, específico, ou contém mu ou não contém. Então o que quer dizer 95% de confiança?"
+
+- Class: mult_question
+  Output: "A que se referem os 95%?"
+  AnswerChoices: Ao método, 95% dos intervalos construídos assim contêm mu;À chance de mu estar dentro deste intervalo específico;À porcentagem dos animais da população que está dentro do intervalo
+  CorrectAnswer: Ao método, 95% dos intervalos construídos assim contêm mu
+  AnswerTests: omnitest(correctVal='Ao método, 95% dos intervalos construídos assim contêm mu')
+  Hint: "mu é fixo e o intervalo já foi calculado: não sobrou nada sorteado neste intervalo específico. O que se repete, e pode acertar ou errar, é o procedimento."
+
+- Class: text
+  Output: "Vamos testar essa afirmação. Escrevi a função contem_mu(n), que repete exatamente os passos que você acabou de digitar: sorteia uma amostra de tamanho n, monta o intervalo e devolve TRUE se ele contém mu."
+
+- Class: cmd_question
+  Output: "Digite contem_mu, sem parênteses, para ver o código da função."
+  CorrectAnswer: contem_mu
+  AnswerTests: usa('contem_mu')
+  Hint: "Digite só contem_mu e aperte Enter."
+
+- Class: text
+  Output: "Um truque útil: quando você calcula a média de valores TRUE e FALSE, o R conta TRUE como 1 e FALSE como 0. A média vira a proporção de TRUE."
+
+- Class: cmd_question
+  Output: "Construa 1000 intervalos com n = 20 e calcule a proporção que contém mu: mean(replicate(1000, contem_mu(20)))"
+  CorrectAnswer: mean(replicate(1000, contem_mu(20)))
+  AnswerTests: eh_proporcao();usa('contem_mu')
+  Hint: "Digite mean(replicate(1000, contem_mu(20)))."
+
+- Class: mult_question
+  Output: "Que valor apareceu, aproximadamente?"
+  AnswerChoices: Perto de 0,95;Perto de 0,50;Exatamente 1
+  CorrectAnswer: Perto de 0,95
+  AnswerTests: omnitest(correctVal='Perto de 0,95')
+  Hint: "É a proporção de intervalos que acertaram mu. Leia o número que o R imprimiu."
+
+- Class: text
+  Output: "É isso que os 95% prometem: a taxa de acerto do método no longo prazo. Cada intervalo individual acerta ou erra, e você nunca sabe qual é o caso do seu."
+
+- Class: cmd_question
+  Output: "Agora repita com amostras de só 5 animais."
+  CorrectAnswer: mean(replicate(1000, contem_mu(5)))
+  AnswerTests: eh_proporcao();usa('contem_mu')
+  Hint: "Digite mean(replicate(1000, contem_mu(5)))."
+
+- Class: mult_question
+  Output: "O que aconteceu com a taxa de acerto com n = 5?"
+  AnswerChoices: Caiu, ficou visivelmente abaixo de 0,95;Continuou em 0,95;Subiu para perto de 1
+  CorrectAnswer: Caiu, ficou visivelmente abaixo de 0,95
+  AnswerTests: omnitest(correctVal='Caiu, ficou visivelmente abaixo de 0,95')
+  Hint: "Compare com o valor que você obteve para n = 20."
+
+- Class: text
+  Output: "O intervalo t supõe que a distribuição das médias seja aproximadamente normal. Com 5 animais sorteados de uma população assimétrica, o Teorema do Limite Central ainda não fez efeito, e o intervalo anunciado como de 95% acerta menos que isso. Pressuposto não é burocracia: quando ele falha, a confiança anunciada deixa de ser verdadeira."
+
+- Class: text
+  Output: "VALOR-P. Última parte. Deixei pronto o objeto duas, com o CTmax de duas espécies: Boana faber, o sapo-ferreiro, e Rhinella icterica, o sapo-cururu. A pergunta é se elas diferem na tolerância ao calor."
+
+- Class: cmd_question
+  Output: "Calcule a média de cada espécie: tapply(duas$ctmax, duas$especie, mean)"
+  CorrectAnswer: tapply(duas$ctmax, duas$especie, mean)
+  AnswerTests: omnitest(correctExpr='tapply(duas$ctmax, duas$especie, mean)')
+  Hint: "Digite tapply(duas$ctmax, duas$especie, mean). A tapply() aplica a função mean a cada grupo de especie."
+
+- Class: cmd_question
+  Output: "A função diff() subtrai o primeiro valor do segundo. Guarde a diferença entre as médias em dif_obs: dif_obs <- diff(tapply(duas$ctmax, duas$especie, mean))"
+  CorrectAnswer: dif_obs <- diff(tapply(duas$ctmax, duas$especie, mean))
+  AnswerTests: vale('dif_obs', 'diff(tapply(duas$ctmax, duas$especie, mean))')
+  Hint: "Digite dif_obs <- diff(tapply(duas$ctmax, duas$especie, mean))."
+
+- Class: text
+  Output: "O sapo-cururu tolera, em média, uns 0,33 grau a mais. A hipótese nula diz que a espécie não importa e que essa diferença é só variação amostral. Se for verdade, os rótulos de espécie são intercambiáveis: embaralhá-los entre os animais não deveria mudar nada de importante."
+
+- Class: cmd_question
+  Output: "Veja como ficam os rótulos embaralhados: sample(duas$especie)"
+  CorrectAnswer: sample(duas$especie)
+  AnswerTests: usa('sample')
+  Hint: "Digite sample(duas$especie). É o mesmo sample() de antes: sem um tamanho, ele só reordena o vetor inteiro."
+
+- Class: text
+  Output: "A função dif_embaralhada() que deixei pronta faz isso e devolve a diferença entre as médias com os rótulos trocados. Essa diferença surgiu só por acaso, porque a espécie de cada animal foi decidida no sorteio."
+
+- Class: cmd_question
+  Output: "Gere 5000 diferenças ao acaso e guarde em difs: difs <- replicate(5000, dif_embaralhada())"
+  CorrectAnswer: difs <- replicate(5000, dif_embaralhada())
+  AnswerTests: vetor_criado('difs', 5000);usa('replicate')
+  Hint: "Digite difs <- replicate(5000, dif_embaralhada()). Leva alguns segundos."
+
+- Class: cmd_question
+  Output: "Faça o histograma dessas diferenças."
+  CorrectAnswer: hist(difs)
+  AnswerTests: usa('hist')
+  Hint: "Digite hist(difs)."
+
+- Class: cmd_question
+  Output: "Marque a diferença observada com uma linha vermelha: abline(v = dif_obs, col = 'red')"
+  CorrectAnswer: abline(v = dif_obs, col = 'red')
+  AnswerTests: usa('abline')
+  Hint: "Digite abline(v = dif_obs, col = 'red'). O histograma precisa estar aberto na aba Plots."
+
+- Class: mult_question
+  Output: "Onde caiu a linha vermelha?"
+  AnswerChoices: Na cauda, poucas diferenças ao acaso são tão grandes quanto ela;No centro, entre as diferenças mais comuns;Muito longe de todas, fora do gráfico
+  CorrectAnswer: Na cauda, poucas diferenças ao acaso são tão grandes quanto ela
+  AnswerTests: omnitest(correctVal='Na cauda, poucas diferenças ao acaso são tão grandes quanto ela')
+  Hint: "Compare a posição da linha com o pico do histograma."
+
+- Class: text
+  Output: "O valor-p é a proporção de diferenças obtidas ao acaso que são pelo menos tão extremas quanto a observada, para qualquer um dos lados. A função abs() tira o sinal, para contar os dois lados de uma vez."
+
+- Class: cmd_question
+  Output: "Calcule o valor-p: mean(abs(difs) >= abs(dif_obs))"
+  CorrectAnswer: mean(abs(difs) >= abs(dif_obs))
+  AnswerTests: eh_proporcao();usa('abs')
+  Hint: "Digite mean(abs(difs) >= abs(dif_obs)). É o mesmo truque da média de TRUE e FALSE."
+
+- Class: text
+  Output: "Deve ter dado perto de 0,03. Em palavras: se as duas espécies não diferissem, uma diferença tão grande quanto a observada apareceria por acaso em uns 3% dos estudos."
+
+- Class: cmd_question
+  Output: "Compare com o teste t, que chega ao mesmo lugar por uma fórmula: t.test(ctmax ~ especie, data = duas)"
+  CorrectAnswer: t.test(ctmax ~ especie, data = duas)
+  AnswerTests: usa('t.test')
+  Hint: "Digite t.test(ctmax ~ especie, data = duas). O til se lê como 'em função de'."
+
+- Class: mult_question
+  Output: "O p-value do teste t ficou próximo do valor-p da permutação?"
+  AnswerChoices: Sim, os dois ficam perto de 0,03;Não, o do teste t é dez vezes maior;Não, o teste t não dá valor-p
+  CorrectAnswer: Sim, os dois ficam perto de 0,03
+  AnswerTests: omnitest(correctVal='Sim, os dois ficam perto de 0,03')
+  Hint: "Procure 'p-value' na saída do t.test()."
+
+- Class: text
+  Output: "O teste t é um atalho matemático para o que você acabou de fazer por força bruta. Quando os pressupostos dele valem, os dois concordam."
+
+- Class: mult_question
+  Output: "Com p perto de 0,03, a diferença é estatisticamente significativa ao nível de 5%. O que isso diz sobre a biologia?"
+  AnswerChoices: Que a diferença dificilmente é só acaso, mas 0,33 grau pode ser pequeno demais para importar aos animais;Que a diferença é grande e biologicamente importante;Que há 97% de chance de as espécies serem diferentes
+  CorrectAnswer: Que a diferença dificilmente é só acaso, mas 0,33 grau pode ser pequeno demais para importar aos animais
+  AnswerTests: omnitest(correctVal='Que a diferença dificilmente é só acaso, mas 0,33 grau pode ser pequeno demais para importar aos animais')
+  Hint: "O valor-p foi calculado supondo que a hipótese nula é verdadeira; ele não é a probabilidade de ela ser falsa. E ele não mede o tamanho da diferença."
+
+- Class: text
+  Output: "Significância estatística diz se um efeito se distingue do acaso; se ele importa, quem diz é a biologia. Por isso, reporte sempre o tamanho do efeito (aqui, 0,33 grau) junto com o valor-p."
+
+- Class: text
+  Output: "Resumo. O erro padrão é o desvio padrão da distribuição amostral. Os 95% do intervalo de confiança são a taxa de acerto do método. O valor-p é a frequência de resultados tão extremos quanto o seu num mundo em que a hipótese nula é verdadeira. Hoje você viu os três acontecerem. Bom trabalho!"

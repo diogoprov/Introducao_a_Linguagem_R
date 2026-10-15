@@ -7,7 +7,10 @@ R dentro do próprio console. Acompanham a disciplina
 [Introdução à Linguagem R](https://provetelab.org/intro-r/) (PPGEC/UFMS) e usam
 o mesmo conjunto de dados das aulas práticas (anuros ao longo de gradientes
 altitudinais na Mata Atlântica; Bovo et al. 2023, *Integrative Organismal
-Biology* 5: obad009).
+Biology* 5: obad009). A lição Inferência por Simulação foi escrita para a
+graduação, acompanhando a disciplina
+[Bioestatística](https://provetelab.org/bioestatistica/) (Ciências
+Biológicas/UFMS); pede só a lição Primeiros Passos antes.
 
 | Lição | Aula | Conteúdo |
 |---|---|---|
@@ -16,6 +19,7 @@ Biology* 5: obad009).
 | Manuseio de Dados com dplyr | 04 | pipe (`\|>` e `%>%`), `rename()`, `select()`, `mutate()`, `filter()`, `group_by()` + `summarise()`, `count()` |
 | Modelos Lineares | 06 | ciclo PPDAC: desenho amostral, exploração, `lm()`, diagnose com `plot()` e `performance`, interpretação com `anova()` e `broom` |
 | Rudimentos de Programação | 07 | funções, argumento padrão, escopo, `if`/`ifelse`/`for`, `purrr::map` e `map_dbl`, um modelo por espécie com `split()` + `map()` e `broom` |
+| Inferência por Simulação | Bioestatística 05–07 | população conhecida e `sample()`, distribuição amostral com `replicate()`, Teorema do Limite Central, erro padrão e tamanho da amostra, cobertura do IC de 95% (e como ela falha com n pequeno), valor-p por permutação comparado com `t.test()`, significância estatística × relevância biológica |
 
 ## Para alunos: como fazer
 
