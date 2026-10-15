@@ -1,0 +1,373 @@
+- Class: meta
+  Course: Introducao a Linguagem R
+  Lesson: Testes como Modelos Lineares
+  Author: Diogo B. Provete
+  Type: Standard
+  Organization: UFMS
+  Version: 2.4.5
+
+- Class: text
+  Output: "Bem-vindo(a)! Esta lição acompanha as aulas 08 a 11 de Bioestatística. Teste t, regressão, correlação, ANOVA e qui-quadrado costumam aparecer como ferramentas separadas, cada uma com sua fórmula. Aqui você vai ver que são todos o mesmo modelo, a reta y = a + b * x, mudando só o tipo de x. Leva uns 40 minutos."
+
+- Class: text
+  Output: "Ela supõe que você já fez a lição Inferência por Simulação e sabe o que são erro padrão e valor-p."
+
+- Class: text
+  Output: "Deixei prontos três objetos. anuros tem os 190 animais com CTmax medido e as colunas especie, serra, altitude (em metros) e ctmax (em graus). rhinella tem só os sapos-cururus, Rhinella icterica. E duas tem o sapo-ferreiro e o sapo-cururu, como na lição anterior."
+
+- Class: text
+  Output: "No R, um modelo linear se ajusta com lm(), de linear model. Você escreve uma fórmula do tipo resposta ~ preditor, e lê o til como 'em função de'."
+
+- Class: text
+  Output: "SEM PREDITOR. Comecemos pelo modelo mais simples possível, sem nenhum x. Na fórmula, o 1 representa só o intercepto, o a da reta."
+
+- Class: cmd_question
+  Output: "Ajuste o modelo sem preditor para os sapos-cururus: lm(ctmax ~ 1, data = rhinella)"
+  CorrectAnswer: lm(ctmax ~ 1, data = rhinella)
+  AnswerTests: ajusta('lm(ctmax ~ 1, data = rhinella)')
+  Hint: "Digite lm(ctmax ~ 1, data = rhinella)."
+
+- Class: cmd_question
+  Output: "Agora calcule a média de CTmax dos sapos-cururus."
+  CorrectAnswer: mean(rhinella$ctmax)
+  AnswerTests: omnitest(correctExpr='mean(rhinella$ctmax)')
+  Hint: "Digite mean(rhinella$ctmax)."
+
+- Class: mult_question
+  Output: "Compare os dois números. O que o intercepto do modelo sem preditor estima?"
+  AnswerChoices: A média de CTmax;A mediana de CTmax;O desvio padrão de CTmax
+  CorrectAnswer: A média de CTmax
+  AnswerTests: omnitest(correctVal='A média de CTmax')
+  Hint: "Os dois valores são iguais: 38,78."
+
+- Class: text
+  Output: "Um modelo sem preditor prevê o mesmo valor para todos os animais: a média. Todos os modelos a seguir partem dele e acrescentam um x para melhorar a previsão."
+
+- Class: text
+  Output: "REGRESSÃO (aula 09). Nos sapos-cururus, o CTmax muda com a altitude onde o animal foi coletado? Aqui o x é contínuo, em metros."
+
+- Class: cmd_question
+  Output: "Faça o gráfico de dispersão: plot(ctmax ~ altitude, data = rhinella)"
+  CorrectAnswer: plot(ctmax ~ altitude, data = rhinella)
+  AnswerTests: usa('plot')
+  Hint: "Digite plot(ctmax ~ altitude, data = rhinella). A fórmula funciona também no plot()."
+
+- Class: cmd_question
+  Output: "Ajuste a regressão e guarde em m_reg: m_reg <- lm(ctmax ~ altitude, data = rhinella)"
+  CorrectAnswer: m_reg <- lm(ctmax ~ altitude, data = rhinella)
+  AnswerTests: modelo_igual('m_reg', 'lm(ctmax ~ altitude, data = rhinella)')
+  Hint: "Digite m_reg <- lm(ctmax ~ altitude, data = rhinella)."
+
+- Class: cmd_question
+  Output: "Desenhe a reta ajustada sobre o gráfico: abline(m_reg)"
+  CorrectAnswer: abline(m_reg)
+  AnswerTests: usa('abline')
+  Hint: "Digite abline(m_reg). O gráfico de dispersão precisa estar aberto na aba Plots."
+
+- Class: cmd_question
+  Output: "Veja o resumo do modelo: summary(m_reg)"
+  CorrectAnswer: summary(m_reg)
+  AnswerTests: usa('summary')
+  Hint: "Digite summary(m_reg)."
+
+- Class: text
+  Output: "Na tabela Coefficients, a linha (Intercept) é o a, o CTmax previsto na altitude zero. A linha altitude é o b, a inclinação: quanto o CTmax muda a cada metro a mais. As colunas seguintes trazem o erro padrão, o valor t e o valor-p de cada coeficiente."
+
+- Class: mult_question
+  Output: "A inclinação vale cerca de -0,00067. O que isso quer dizer?"
+  AnswerChoices: A cada 1000 m a mais de altitude, o CTmax cai uns 0,67 grau;A cada metro a mais, o CTmax cai 0,67 grau;O CTmax não muda com a altitude
+  CorrectAnswer: A cada 1000 m a mais de altitude, o CTmax cai uns 0,67 grau
+  AnswerTests: omnitest(correctVal='A cada 1000 m a mais de altitude, o CTmax cai uns 0,67 grau')
+  Hint: "A inclinação está em graus por metro. Multiplique por 1000."
+
+- Class: mult_question
+  Output: "O valor-p da inclinação é cerca de 0,004. Que hipótese nula ele testa?"
+  AnswerChoices: Que a inclinação é zero, ou seja, que a reta é horizontal;Que o intercepto é zero;Que nenhum sapo varia no CTmax
+  CorrectAnswer: Que a inclinação é zero, ou seja, que a reta é horizontal
+  AnswerTests: omnitest(correctVal='Que a inclinação é zero, ou seja, que a reta é horizontal')
+  Hint: "Cada linha da tabela testa se aquele coeficiente é zero. Se b fosse zero, o CTmax não mudaria com a altitude."
+
+- Class: text
+  Output: "CORRELAÇÃO (aula 09). Na mesma aula você viu a correlação de Pearson, testada com cor.test()."
+
+- Class: cmd_question
+  Output: "Teste a correlação entre CTmax e altitude: cor.test(rhinella$ctmax, rhinella$altitude)"
+  CorrectAnswer: cor.test(rhinella$ctmax, rhinella$altitude)
+  AnswerTests: usa('cor.test')
+  Hint: "Digite cor.test(rhinella$ctmax, rhinella$altitude)."
+
+- Class: mult_question
+  Output: "Compare o p-value do cor.test() com o valor-p da inclinação no summary(m_reg). O que você vê?"
+  AnswerChoices: São iguais;O da correlação é bem menor;O da correlação é bem maior
+  CorrectAnswer: São iguais
+  AnswerTests: omnitest(correctVal='São iguais')
+  Hint: "Os dois devem ser 0,004137. O valor t também é o mesmo, -3,02."
+
+- Class: text
+  Output: "Não é coincidência: testar se a correlação é zero e testar se a inclinação é zero são o mesmo teste. A diferença está na escala. O r não tem unidade; a inclinação está em graus por metro."
+
+- Class: cmd_question
+  Output: "A função scale() padroniza uma variável: subtrai a média e divide pelo desvio padrão. Ajuste a regressão com as duas variáveis padronizadas: lm(scale(ctmax) ~ scale(altitude), data = rhinella)"
+  CorrectAnswer: lm(scale(ctmax) ~ scale(altitude), data = rhinella)
+  AnswerTests: ajusta('lm(scale(ctmax) ~ scale(altitude), data = rhinella)')
+  Hint: "Digite lm(scale(ctmax) ~ scale(altitude), data = rhinella)."
+
+- Class: mult_question
+  Output: "Com as duas variáveis padronizadas, a inclinação ficou igual a quê?"
+  AnswerChoices: Ao r do cor.test(), cerca de -0,41;A zero;A um
+  CorrectAnswer: Ao r do cor.test(), cerca de -0,41
+  AnswerTests: omnitest(correctVal='Ao r do cor.test(), cerca de -0,41')
+  Hint: "Procure o valor 'cor' na saída do cor.test() e compare com o coeficiente de scale(altitude)."
+
+- Class: text
+  Output: "A correlação é uma regressão com as duas variáveis padronizadas. O intercepto saiu praticamente zero porque, depois de padronizar, as duas médias valem zero."
+
+- Class: text
+  Output: "TESTE T (aula 08). Agora o x deixa de ser contínuo e vira um grupo: sapo-ferreiro ou sapo-cururu. O truque é transformar o grupo num número, 0 ou 1."
+
+- Class: cmd_question
+  Output: "Crie a coluna x, que vale 1 para o sapo-cururu e 0 para o sapo-ferreiro: duas$x <- as.numeric(duas$especie == 'Rhinella icterica')"
+  CorrectAnswer: duas$x <- as.numeric(duas$especie == 'Rhinella icterica')
+  AnswerTests: vale('duas$x', "as.numeric(duas$especie == 'Rhinella icterica')")
+  Hint: "Digite duas$x <- as.numeric(duas$especie == 'Rhinella icterica'). A comparação dá TRUE ou FALSE, e as.numeric() troca por 1 ou 0, como na lição Primeiros Passos."
+
+- Class: cmd_question
+  Output: "Faça o gráfico de CTmax em função de x: plot(ctmax ~ x, data = duas)"
+  CorrectAnswer: plot(ctmax ~ x, data = duas)
+  AnswerTests: usa('plot')
+  Hint: "Digite plot(ctmax ~ x, data = duas)."
+
+- Class: cmd_question
+  Output: "Ajuste a reta e guarde em m_t: m_t <- lm(ctmax ~ x, data = duas)"
+  CorrectAnswer: m_t <- lm(ctmax ~ x, data = duas)
+  AnswerTests: modelo_igual('m_t', 'lm(ctmax ~ x, data = duas)')
+  Hint: "Digite m_t <- lm(ctmax ~ x, data = duas)."
+
+- Class: cmd_question
+  Output: "Desenhe a reta sobre o gráfico."
+  CorrectAnswer: abline(m_t)
+  AnswerTests: usa('abline')
+  Hint: "Digite abline(m_t)."
+
+- Class: cmd_question
+  Output: "Veja os coeficientes: coef(m_t)"
+  CorrectAnswer: coef(m_t)
+  AnswerTests: omnitest(correctExpr='coef(m_t)')
+  Hint: "Digite coef(m_t)."
+
+- Class: cmd_question
+  Output: "E as médias das duas espécies: tapply(duas$ctmax, duas$especie, mean)"
+  CorrectAnswer: tapply(duas$ctmax, duas$especie, mean)
+  AnswerTests: omnitest(correctExpr='tapply(duas$ctmax, duas$especie, mean)')
+  Hint: "Digite tapply(duas$ctmax, duas$especie, mean)."
+
+- Class: mult_question
+  Output: "Compare. O que são o intercepto e a inclinação de m_t?"
+  AnswerChoices: O intercepto é a média do sapo-ferreiro e a inclinação é a diferença entre as duas médias;O intercepto é a média do sapo-cururu e a inclinação é a média do sapo-ferreiro;O intercepto é a média geral e a inclinação é o desvio padrão
+  CorrectAnswer: O intercepto é a média do sapo-ferreiro e a inclinação é a diferença entre as duas médias
+  AnswerTests: omnitest(correctVal='O intercepto é a média do sapo-ferreiro e a inclinação é a diferença entre as duas médias')
+  Hint: "O sapo-ferreiro está em x = 0, onde a reta vale o intercepto. A média do sapo-cururu é 38,78; a do sapo-ferreiro, 38,44."
+
+- Class: text
+  Output: "Como x vai só de 0 a 1, subir uma unidade de x é passar de uma espécie para a outra. A reta liga as duas médias, e a inclinação vira a diferença entre elas, que é justamente o que o teste t avalia."
+
+- Class: cmd_question
+  Output: "Rode o teste t clássico: t.test(ctmax ~ especie, data = duas, var.equal = TRUE)"
+  CorrectAnswer: t.test(ctmax ~ especie, data = duas, var.equal = TRUE)
+  AnswerTests: usa('t.test')
+  Hint: "Digite t.test(ctmax ~ especie, data = duas, var.equal = TRUE)."
+
+- Class: text
+  Output: "O var.equal = TRUE pede o teste t clássico, que supõe a mesma variância nos dois grupos, como o lm(). Sem ele, o R faz a versão de Welch, a da lição anterior, que dá um p um pouco diferente."
+
+- Class: cmd_question
+  Output: "Agora veja o resumo do modelo: summary(m_t)"
+  CorrectAnswer: summary(m_t)
+  AnswerTests: usa('summary')
+  Hint: "Digite summary(m_t)."
+
+- Class: mult_question
+  Output: "Compare o t e o p-value do t.test() com a linha x do summary(m_t)."
+  AnswerChoices: Iguais, t = 2,19 e p = 0,031, só o sinal do t muda;Completamente diferentes;O summary() não mostra valor-p
+  CorrectAnswer: Iguais, t = 2,19 e p = 0,031, só o sinal do t muda
+  AnswerTests: omnitest(correctVal='Iguais, t = 2,19 e p = 0,031, só o sinal do t muda')
+  Hint: "O sinal depende só da ordem da subtração: o t.test() faz ferreiro menos cururu, e o lm() faz cururu menos ferreiro."
+
+- Class: text
+  Output: "Você não precisa criar o x à mão. Quando o preditor é texto ou fator, o R cria a variável 0 ou 1 sozinho."
+
+- Class: cmd_question
+  Output: "Ajuste o modelo usando a coluna especie diretamente: lm(ctmax ~ especie, data = duas)"
+  CorrectAnswer: lm(ctmax ~ especie, data = duas)
+  AnswerTests: ajusta('lm(ctmax ~ especie, data = duas)')
+  Hint: "Digite lm(ctmax ~ especie, data = duas)."
+
+- Class: text
+  Output: "Repare no nome do coeficiente: especieRhinella icterica. O R escolheu o sapo-ferreiro como nível de referência, por ordem alfabética, e criou um 0 ou 1 para o sapo-cururu. É o mesmo x que você criou."
+
+- Class: text
+  Output: "ANOVA (aula 11). E com as cinco espécies? O R cria uma variável 0 ou 1 para cada espécie além da referência. O modelo continua sendo o mesmo lm()."
+
+- Class: cmd_question
+  Output: "Ajuste o modelo com as cinco espécies e guarde em m_anova: m_anova <- lm(ctmax ~ especie, data = anuros)"
+  CorrectAnswer: m_anova <- lm(ctmax ~ especie, data = anuros)
+  AnswerTests: modelo_igual('m_anova', 'lm(ctmax ~ especie, data = anuros)')
+  Hint: "Digite m_anova <- lm(ctmax ~ especie, data = anuros)."
+
+- Class: cmd_question
+  Output: "Veja os coeficientes."
+  CorrectAnswer: coef(m_anova)
+  AnswerTests: omnitest(correctExpr='coef(m_anova)')
+  Hint: "Digite coef(m_anova)."
+
+- Class: cmd_question
+  Output: "E as médias das cinco espécies."
+  CorrectAnswer: tapply(anuros$ctmax, anuros$especie, mean)
+  AnswerTests: omnitest(correctExpr='tapply(anuros$ctmax, anuros$especie, mean)')
+  Hint: "Digite tapply(anuros$ctmax, anuros$especie, mean)."
+
+- Class: mult_question
+  Output: "O coeficiente especieDendropsophus minutus vale cerca de -5,19. O que ele é?"
+  AnswerChoices: A diferença entre a média de D. minutus e a do sapo-ferreiro, que é a referência;A média de D. minutus;A diferença entre D. minutus e a média geral
+  CorrectAnswer: A diferença entre a média de D. minutus e a do sapo-ferreiro, que é a referência
+  AnswerTests: omnitest(correctVal='A diferença entre a média de D. minutus e a do sapo-ferreiro, que é a referência')
+  Hint: "Calcule 33,25 menos 38,44 com as médias que o tapply() mostrou."
+
+- Class: text
+  Output: "Cada coeficiente compara uma espécie com a referência. A ANOVA faz uma pergunta só: todas as médias são iguais? Para responder, ela compara o modelo com espécie ao modelo sem preditor, aquele que prevê a mesma média para todos."
+
+- Class: cmd_question
+  Output: "Peça a tabela de ANOVA do modelo: anova(m_anova)"
+  CorrectAnswer: anova(m_anova)
+  AnswerTests: usa('anova')
+  Hint: "Digite anova(m_anova)."
+
+- Class: cmd_question
+  Output: "Agora a ANOVA com a função clássica, aov(): summary(aov(ctmax ~ especie, data = anuros))"
+  CorrectAnswer: summary(aov(ctmax ~ especie, data = anuros))
+  AnswerTests: usa('aov')
+  Hint: "Digite summary(aov(ctmax ~ especie, data = anuros))."
+
+- Class: mult_question
+  Output: "As duas tabelas batem?"
+  AnswerChoices: Sim, mesmos graus de liberdade, somas de quadrados e valor F;Não, o F é diferente;Não, o aov() dá médias e não um teste
+  CorrectAnswer: Sim, mesmos graus de liberdade, somas de quadrados e valor F
+  AnswerTests: omnitest(correctVal='Sim, mesmos graus de liberdade, somas de quadrados e valor F')
+  Hint: "Compare as colunas Df, Sum Sq e F value das duas saídas."
+
+- Class: text
+  Output: "O aov() é um lm() por dentro, com a saída arrumada como tabela de ANOVA."
+
+- Class: text
+  Output: "E o teste t é uma ANOVA com dois grupos. Com dois grupos, o F da ANOVA é o t ao quadrado."
+
+- Class: cmd_question
+  Output: "Peça a tabela de ANOVA do modelo das duas espécies: anova(m_t)"
+  CorrectAnswer: anova(m_t)
+  AnswerTests: usa('anova')
+  Hint: "Digite anova(m_t)."
+
+- Class: cmd_question
+  Output: "Eleve ao quadrado o t que você viu no teste t, 2.189. Use o ponto como separador decimal."
+  CorrectAnswer: 2.189^2
+  AnswerTests: perto(4.79)
+  Hint: "Digite 2.189^2."
+
+- Class: mult_question
+  Output: "O F de anova(m_t) é igual ao t ao quadrado?"
+  AnswerChoices: Sim, F = 4,79, que é 2,19 ao quadrado;Não, o F é o dobro do t;Não, um não tem relação com o outro
+  CorrectAnswer: Sim, F = 4,79, que é 2,19 ao quadrado
+  AnswerTests: omnitest(correctVal='Sim, F = 4,79, que é 2,19 ao quadrado')
+  Hint: "Compare a coluna F value de anova(m_t) com o número que você acabou de calcular. Veja também o valor-p: 0,031 de novo."
+
+- Class: text
+  Output: "QUI-QUADRADO (aula 10). Até aqui a resposta era contínua. Agora a resposta é uma contagem. A pergunta: a proporção de cada espécie na amostra é a mesma nas duas serras?"
+
+- Class: cmd_question
+  Output: "Monte a tabela de contagens e guarde em tab: tab <- table(anuros$especie, anuros$serra)"
+  CorrectAnswer: tab <- table(anuros$especie, anuros$serra)
+  AnswerTests: vale('tab', 'table(anuros$especie, anuros$serra)')
+  Hint: "Digite tab <- table(anuros$especie, anuros$serra)."
+
+- Class: cmd_question
+  Output: "Veja a tabela."
+  CorrectAnswer: tab
+  AnswerTests: usa('tab')
+  Hint: "Digite tab."
+
+- Class: cmd_question
+  Output: "Rode o teste de qui-quadrado: chisq.test(tab)"
+  CorrectAnswer: chisq.test(tab)
+  AnswerTests: usa('chisq.test')
+  Hint: "Digite chisq.test(tab)."
+
+- Class: text
+  Output: "O qui-quadrado compara as contagens observadas com as esperadas caso espécie e serra fossem independentes. Para fazer o mesmo com um modelo, a tabela precisa estar no formato de uma linha por casela."
+
+- Class: cmd_question
+  Output: "Converta a tabela e guarde em contagens: contagens <- as.data.frame(tab)"
+  CorrectAnswer: contagens <- as.data.frame(tab)
+  AnswerTests: vale('contagens$Freq', 'as.data.frame(tab)$Freq')
+  Hint: "Digite contagens <- as.data.frame(tab)."
+
+- Class: cmd_question
+  Output: "Veja o resultado."
+  CorrectAnswer: contagens
+  AnswerTests: usa('contagens')
+  Hint: "Digite contagens."
+
+- Class: text
+  Output: "Var1 é a espécie, Var2 é a serra e Freq é a contagem. Contagens não são contínuas e não podem ser negativas. Para elas usamos glm(), o modelo linear generalizado, com family = poisson. É por isso que a aula 10 chama o qui-quadrado de modelo linear generalizado."
+
+- Class: cmd_question
+  Output: "Ajuste o modelo de independência e guarde em m_indep: m_indep <- glm(Freq ~ Var1 + Var2, family = poisson, data = contagens)"
+  CorrectAnswer: m_indep <- glm(Freq ~ Var1 + Var2, family = poisson, data = contagens)
+  AnswerTests: modelo_igual('m_indep', 'glm(Freq ~ Var1 + Var2, family = poisson, data = contagens)')
+  Hint: "Digite m_indep <- glm(Freq ~ Var1 + Var2, family = poisson, data = contagens)."
+
+- Class: text
+  Output: "O sinal + diz que cada espécie tem seu total e cada serra tem o seu, e nada mais. Esse é o modelo da hipótese nula de independência: as contagens que ele prevê são exatamente as esperadas do qui-quadrado."
+
+- Class: cmd_question
+  Output: "Agora o modelo com associação, guardado em m_assoc: m_assoc <- glm(Freq ~ Var1 * Var2, family = poisson, data = contagens)"
+  CorrectAnswer: m_assoc <- glm(Freq ~ Var1 * Var2, family = poisson, data = contagens)
+  AnswerTests: modelo_igual('m_assoc', 'glm(Freq ~ Var1 * Var2, family = poisson, data = contagens)')
+  Hint: "Digite m_assoc <- glm(Freq ~ Var1 * Var2, family = poisson, data = contagens). A única mudança é o * no lugar do +."
+
+- Class: text
+  Output: "O * acrescenta a interação entre espécie e serra: deixa a proporção de cada espécie mudar de uma serra para a outra. Essa é a associação que o qui-quadrado testa."
+
+- Class: cmd_question
+  Output: "Compare os dois modelos com o teste de escore: anova(m_indep, m_assoc, test = 'Rao')"
+  CorrectAnswer: anova(m_indep, m_assoc, test = 'Rao')
+  AnswerTests: usa('anova')
+  Hint: "Digite anova(m_indep, m_assoc, test = 'Rao')."
+
+- Class: mult_question
+  Output: "Compare a coluna Rao e o valor-p com o X-squared e o p-value do chisq.test()."
+  AnswerChoices: Iguais, 13,06 e p = 0,011;Diferentes, o Rao é o dobro;O anova() não dá valor-p
+  CorrectAnswer: Iguais, 13,06 e p = 0,011
+  AnswerTests: omnitest(correctVal='Iguais, 13,06 e p = 0,011')
+  Hint: "Role o console para cima até a saída do chisq.test()."
+
+- Class: text
+  Output: "Comparar o modelo sem interação com o modelo com interação é o teste de qui-quadrado. A estatística de Rao, ou teste de escore, é exatamente o X² de Pearson. A coluna Deviance, ao lado, é outra versão do mesmo teste, o teste G, e dá um valor parecido, 13,63."
+
+- Class: mult_question
+  Output: "Em linguagem biológica, o que o resultado diz?"
+  AnswerChoices: A composição de espécies na amostra difere entre as serras;Uma serra tem mais animais que a outra;Os animais da Serra do Mar têm CTmax maior
+  CorrectAnswer: A composição de espécies na amostra difere entre as serras
+  AnswerTests: omnitest(correctVal='A composição de espécies na amostra difere entre as serras')
+  Hint: "O teste é sobre a interação entre espécie e serra, não sobre o total de cada serra. Olhe Physalaemus cuvieri na tabela: 13 numa serra e 12 na outra, enquanto Dendropsophus minutus tem 7 e 36."
+
+- Class: text
+  Output: "Cuidado com a interpretação: essas contagens refletem quantos animais de cada espécie foram coletados e medidos, e não a abundância das espécies na natureza. O teste está certo; o que ele pode dizer depende de como os dados foram amostrados."
+
+- Class: text
+  Output: "Resumo. Média: lm(y ~ 1). Regressão: lm(y ~ x), com x contínuo. Correlação: a mesma regressão com as variáveis padronizadas. Teste t: lm(y ~ grupo), com dois grupos. ANOVA: lm(y ~ grupo), com vários grupos. Qui-quadrado: glm() de contagens, comparando o modelo sem e com interação. Um modelo, muitos nomes."
+
+- Class: text
+  Output: "Uma consequência prática: regressão, correlação, teste t e ANOVA são o mesmo lm() e por isso têm os mesmos pressupostos: observações independentes e resíduos aproximadamente normais, com variância parecida em todos os grupos ou ao longo de todo o x. Quem aprende a checar os pressupostos do lm() aprende para os quatro. O qui-quadrado, por ser um glm() de contagens, tem os seus: contagens independentes e esperados que não sejam muito pequenos."
+
+- Class: text
+  Output: "Daqui em diante, quando aparecer um teste novo, pergunte: qual é a resposta, qual é o preditor e qual modelo linear está por trás? Bom trabalho!"
