@@ -1,0 +1,240 @@
+- Class: meta
+  Course: Introducao a Linguagem R
+  Lesson: Amostragem e Delineamento
+  Author: Diogo B. Provete
+  Type: Standard
+  Organization: UFMS
+  Version: 2.4.5
+
+- Class: text
+  Output: "Bem-vindo(a)! Esta lição volta à aula 02 de Bioestatística, sobre amostragem e delineamento, agora que você já sabe sortear amostras, calcular valores-p e ajustar modelos lineares. A ideia é ver, com dados simulados, por que nenhuma análise conserta um plano ruim. Leva uns 35 minutos."
+
+- Class: text
+  Output: "Ela supõe que você já fez as lições Inferência por Simulação e Testes como Modelos Lineares: sabe usar sample(), replicate(), t.test() e lm()."
+
+- Class: text
+  Output: "TÉCNICAS DE AMOSTRAGEM. Deixei pronto o objeto floresta: a floresta simulada da aula 02, dividida em 256 parcelas, cada uma com seu tipo de solo e sua biomassa de árvores, em toneladas por hectare. Como é simulada, conhecemos a resposta certa."
+
+- Class: cmd_question
+  Output: "Calcule a biomassa média da floresta inteira e guarde em mu."
+  CorrectAnswer: mu <- mean(floresta$biomassa)
+  AnswerTests: vale('mu', 'mean(floresta$biomassa)')
+  Hint: "Digite mu <- mean(floresta$biomassa)."
+
+- Class: cmd_question
+  Output: "Quantas parcelas há de cada tipo de solo? table(floresta$solo)"
+  CorrectAnswer: table(floresta$solo)
+  AnswerTests: resulta('table(floresta$solo)')
+  Hint: "Digite table(floresta$solo)."
+
+- Class: cmd_question
+  Output: "E qual a biomassa média em cada solo? tapply(floresta$biomassa, floresta$solo, mean)"
+  CorrectAnswer: tapply(floresta$biomassa, floresta$solo, mean)
+  AnswerTests: resulta('tapply(floresta$biomassa, floresta$solo, mean)')
+  Hint: "Digite tapply(floresta$biomassa, floresta$solo, mean)."
+
+- Class: text
+  Output: "Os solos são bem diferentes: o argiloso tem mais que o dobro da biomassa do rochoso. Guarde isso. Você só tem recursos para medir 16 das 256 parcelas. Como escolher quais?"
+
+- Class: text
+  Output: "A primeira opção é a amostragem aleatória simples: todas as parcelas têm a mesma chance de serem sorteadas."
+
+- Class: cmd_question
+  Output: "Repita 2000 vezes o sorteio de 16 parcelas ao acaso e guarde as médias em simples: simples <- replicate(2000, mean(sample(floresta$biomassa, 16)))"
+  CorrectAnswer: simples <- replicate(2000, mean(sample(floresta$biomassa, 16)))
+  AnswerTests: vetor_criado('simples', 2000);usa('replicate')
+  Hint: "Digite simples <- replicate(2000, mean(sample(floresta$biomassa, 16)))."
+
+- Class: text
+  Output: "A segunda opção é a amostragem estratificada: sortear dentro de cada solo, em número proporcional à área dele. Escrevi a função estratificada(), que faz isso e devolve a estimativa da média. Digite estratificada, sem parênteses, para ver o código."
+
+- Class: cmd_question
+  Output: "Veja o código da função."
+  CorrectAnswer: estratificada
+  AnswerTests: usa('estratificada')
+  Hint: "Digite estratificada e aperte Enter."
+
+- Class: text
+  Output: "Ela sorteia 5 parcelas no solo arenoso, 4 no argiloso e 7 no rochoso, e calcula a média de cada solo. Na última linha, cada média é multiplicada pela fração da área que o solo ocupa. Esse peso corrige o arredondamento: 16 parcelas não se dividem exatamente na proporção da área, e sem o peso a estimativa sairia um pouco puxada para baixo."
+
+- Class: cmd_question
+  Output: "Repita a amostragem estratificada 2000 vezes e guarde em estrat."
+  CorrectAnswer: estrat <- replicate(2000, estratificada())
+  AnswerTests: vetor_criado('estrat', 2000);usa('replicate')
+  Hint: "Digite estrat <- replicate(2000, estratificada())."
+
+- Class: cmd_question
+  Output: "Compare o centro das duas técnicas com a resposta certa: c(mean(simples), mean(estrat), mu)"
+  CorrectAnswer: c(mean(simples), mean(estrat), mu)
+  AnswerTests: resulta('c(mean(simples), mean(estrat), mu)')
+  Hint: "Digite c(mean(simples), mean(estrat), mu)."
+
+- Class: text
+  Output: "As duas acertam em média: nenhuma tem viés. A diferença está em quanto cada amostra pode errar."
+
+- Class: cmd_question
+  Output: "Compare o desvio padrão das estimativas: c(sd(simples), sd(estrat))"
+  CorrectAnswer: c(sd(simples), sd(estrat))
+  AnswerTests: resulta('c(sd(simples), sd(estrat))')
+  Hint: "Digite c(sd(simples), sd(estrat))."
+
+- Class: mult_question
+  Output: "Com as mesmas 16 parcelas de esforço, qual técnica estima a média com mais precisão, e por quê?"
+  AnswerChoices: A estratificada, porque garante todos os solos na proporção certa e tira do erro a diferença entre solos;A aleatória simples, porque é mais aleatória;As duas são igualmente precisas
+  CorrectAnswer: A estratificada, porque garante todos os solos na proporção certa e tira do erro a diferença entre solos
+  AnswerTests: omnitest(correctVal='A estratificada, porque garante todos os solos na proporção certa e tira do erro a diferença entre solos')
+  Hint: "O desvio padrão da estratificada fica em menos da metade do da simples. Na simples, o sorteio pode cair, por acaso, quase todo no solo argiloso."
+
+- Class: cmd_question
+  Output: "Por fim, a amostragem sistemática, uma parcela a cada 4 nas duas direções. Repita 2000 vezes e calcule o desvio padrão das estimativas: sd(replicate(2000, sistematica()))"
+  CorrectAnswer: sd(replicate(2000, sistematica()))
+  AnswerTests: entre(5, 8.5);usa('sistematica')
+  Hint: "Digite sd(replicate(2000, sistematica()))."
+
+- Class: text
+  Output: "A sistemática fica no meio: cobre a área de modo uniforme, mas não usa a informação dos solos. E tem uma armadilha, que você viu na aula: se o ambiente tiver um padrão periódico com o mesmo intervalo da grade, todas as parcelas caem no mesmo ponto do ciclo."
+
+- Class: mult_question
+  Output: "Num transecto, a umidade do solo sobe e desce a cada 10 metros, por causa de sulcos de plantio. Você mede a umidade a cada 10 metros. O que acontece?"
+  AnswerChoices: A estimativa fica enviesada, e repetir a amostragem com o mesmo intervalo não resolve;A estimativa fica mais precisa, porque a grade é regular;Nada, a sistemática nunca tem viés
+  CorrectAnswer: A estimativa fica enviesada, e repetir a amostragem com o mesmo intervalo não resolve
+  AnswerTests: omnitest(correctVal='A estimativa fica enviesada, e repetir a amostragem com o mesmo intervalo não resolve')
+  Hint: "Se todo ponto cai sempre na mesma fase da onda, todos medem, por exemplo, o topo do sulco."
+
+- Class: text
+  Output: "CONFUNDIMENTO. Agora um estudo observacional. Deixei pronto o objeto obs, com 60 parcelas onde foram medidos a água no solo, o nitrogênio no solo e a taxa de crescimento das árvores. A pergunta: o nitrogênio aumenta o crescimento?"
+
+- Class: cmd_question
+  Output: "Faça o gráfico: plot(crescimento ~ nitrogenio, data = obs)"
+  CorrectAnswer: plot(crescimento ~ nitrogenio, data = obs)
+  AnswerTests: usa('plot')
+  Hint: "Digite plot(crescimento ~ nitrogenio, data = obs)."
+
+- Class: cmd_question
+  Output: "Ajuste a regressão e guarde em m1: m1 <- lm(crescimento ~ nitrogenio, data = obs)"
+  CorrectAnswer: m1 <- lm(crescimento ~ nitrogenio, data = obs)
+  AnswerTests: modelo_igual('m1', 'lm(crescimento ~ nitrogenio, data = obs)')
+  Hint: "Digite m1 <- lm(crescimento ~ nitrogenio, data = obs)."
+
+- Class: cmd_question
+  Output: "Veja o resumo."
+  CorrectAnswer: summary(m1)
+  AnswerTests: usa('summary')
+  Hint: "Digite summary(m1)."
+
+- Class: text
+  Output: "Inclinação positiva e valor-p minúsculo. Parece um resultado forte. Só que, nesta simulação, eu programei o nitrogênio para não ter efeito nenhum: quem faz as árvores crescerem é só a água. Acontece que solos mais úmidos também retêm mais nitrogênio. A água é uma variável confundidora: afeta ao mesmo tempo a preditora e a resposta."
+
+- Class: cmd_question
+  Output: "Refaça o gráfico, colorindo as parcelas pela classe de umidade: plot(crescimento ~ nitrogenio, data = obs, col = classe_agua)"
+  CorrectAnswer: plot(crescimento ~ nitrogenio, data = obs, col = classe_agua)
+  AnswerTests: usa('plot')
+  Hint: "Digite plot(crescimento ~ nitrogenio, data = obs, col = classe_agua). Preto é seco, vermelho intermediário e verde úmido."
+
+- Class: mult_question
+  Output: "O que o gráfico colorido mostra?"
+  AnswerChoices: As parcelas úmidas têm, ao mesmo tempo, mais nitrogênio e mais crescimento;Cada cor tem uma relação muito mais forte que a do conjunto;As cores estão misturadas ao acaso
+  CorrectAnswer: As parcelas úmidas têm, ao mesmo tempo, mais nitrogênio e mais crescimento
+  AnswerTests: omnitest(correctVal='As parcelas úmidas têm, ao mesmo tempo, mais nitrogênio e mais crescimento')
+  Hint: "Repare onde ficam os pontos verdes e os pretos. Dentro de cada cor, a relação é bem mais fraca."
+
+- Class: text
+  Output: "Se a confundidora foi medida, dá para incluí-la no modelo, como uma segunda preditora. O modelo passa a estimar o efeito do nitrogênio comparando parcelas com a mesma quantidade de água."
+
+- Class: cmd_question
+  Output: "Ajuste o modelo com as duas preditoras e veja o resumo: summary(lm(crescimento ~ nitrogenio + agua, data = obs))"
+  CorrectAnswer: summary(lm(crescimento ~ nitrogenio + agua, data = obs))
+  AnswerTests: usa('lm');usa('summary')
+  Hint: "Digite summary(lm(crescimento ~ nitrogenio + agua, data = obs))."
+
+- Class: mult_question
+  Output: "O que aconteceu com o efeito do nitrogênio?"
+  AnswerChoices: Sumiu, a inclinação ficou perto de zero e o valor-p subiu para uns 0,73;Ficou ainda mais forte;Não mudou
+  CorrectAnswer: Sumiu, a inclinação ficou perto de zero e o valor-p subiu para uns 0,73
+  AnswerTests: omnitest(correctVal='Sumiu, a inclinação ficou perto de zero e o valor-p subiu para uns 0,73')
+  Hint: "Olhe a linha nitrogenio na tabela Coefficients, nas colunas Estimate e Pr(>|t|)."
+
+- Class: text
+  Output: "Funcionou porque a água foi medida. Mas num estudo observacional sempre pode haver confundidoras que ninguém mediu, e essas nenhum modelo corrige. A saída é o experimento."
+
+- Class: text
+  Output: "ALEATORIZAÇÃO. Imagine que você vai adicionar nitrogênio às mesmas 60 parcelas, em três tratamentos: Controle, Pouco N e Muito N, 20 parcelas cada. Um colega distribuiu os tratamentos por conveniência, e o resultado está no objeto trat_conveniencia."
+
+- Class: cmd_question
+  Output: "Veja quanta água as parcelas de cada tratamento têm: tapply(obs$agua, trat_conveniencia, mean)"
+  CorrectAnswer: tapply(obs$agua, trat_conveniencia, mean)
+  AnswerTests: resulta('tapply(obs$agua, trat_conveniencia, mean)')
+  Hint: "Digite tapply(obs$agua, trat_conveniencia, mean)."
+
+- Class: mult_question
+  Output: "Qual o problema desse desenho?"
+  AnswerChoices: O tratamento anda junto com a água, então qualquer diferença no crescimento pode ser efeito da água;Nenhum, cada tratamento tem 20 parcelas;O controle tem parcelas demais
+  CorrectAnswer: O tratamento anda junto com a água, então qualquer diferença no crescimento pode ser efeito da água
+  AnswerTests: omnitest(correctVal='O tratamento anda junto com a água, então qualquer diferença no crescimento pode ser efeito da água')
+  Hint: "O controle ficou nas parcelas secas e o Muito N nas úmidas."
+
+- Class: cmd_question
+  Output: "Agora sorteie os tratamentos e guarde em trat: trat <- sample(rep(c('Controle', 'Pouco N', 'Muito N'), 20))"
+  CorrectAnswer: trat <- sample(rep(c('Controle', 'Pouco N', 'Muito N'), 20))
+  AnswerTests: usa('sample');usa('rep')
+  Hint: "Digite trat <- sample(rep(c('Controle', 'Pouco N', 'Muito N'), 20)). O rep() repete os três nomes 20 vezes e o sample() embaralha."
+
+- Class: cmd_question
+  Output: "Veja a água média de cada tratamento sorteado."
+  CorrectAnswer: tapply(obs$agua, trat, mean)
+  AnswerTests: resulta('tapply(obs$agua, trat, mean)')
+  Hint: "Digite tapply(obs$agua, trat, mean)."
+
+- Class: mult_question
+  Output: "E agora?"
+  AnswerChoices: As médias de água ficam parecidas entre os tratamentos;O controle continua nas parcelas mais secas;Todas as parcelas ficaram com a mesma água
+  CorrectAnswer: As médias de água ficam parecidas entre os tratamentos
+  AnswerTests: omnitest(correctVal='As médias de água ficam parecidas entre os tratamentos')
+  Hint: "Compare com as médias do desenho por conveniência, que iam de uns 10 a uns 29."
+
+- Class: text
+  Output: "O sorteio não faz a água desaparecer: ela continua variando entre as parcelas. Mas ela passa a se distribuir por acaso entre os tratamentos, em vez de andar junto com um deles. E vale para todas as confundidoras ao mesmo tempo, inclusive as que você nem sabe que existem. É por isso que experimentos aleatorizados permitem inferir causa."
+
+- Class: text
+  Output: "PSEUDORRÉPLICA. O último erro é o mais comum. Você quer saber se um tratamento na água altera o tamanho de girinos. Trata uma lagoa, deixa outra como controle e mede 10 girinos em cada. Tem 20 medidas. Quantas réplicas?"
+
+- Class: mult_question
+  Output: "Quantas réplicas independentes do tratamento esse desenho tem?"
+  AnswerChoices: Uma lagoa por tratamento;Dez girinos por tratamento;Vinte girinos no total
+  CorrectAnswer: Uma lagoa por tratamento
+  AnswerTests: omnitest(correctVal='Uma lagoa por tratamento')
+  Hint: "O tratamento foi aplicado à lagoa, e não a cada girino. Os girinos da mesma lagoa compartilham a água, a temperatura e a comida."
+
+- Class: text
+  Output: "Tratar os 10 girinos como réplicas é pseudorréplica. Qualquer diferença entre as duas lagoas, que existiria mesmo sem tratamento, passa a ser lida como efeito do tratamento. Vamos medir o estrago."
+
+- Class: text
+  Output: "Escrevi a função estudo_pseudo(): ela simula esse estudo com duas lagoas que diferem só por acaso, sem nenhum efeito do tratamento, e devolve o valor-p de um teste t sobre os 20 girinos."
+
+- Class: cmd_question
+  Output: "Repita o estudo 1000 vezes e calcule a proporção de valores-p abaixo de 0,05: mean(replicate(1000, estudo_pseudo()) < 0.05)"
+  CorrectAnswer: mean(replicate(1000, estudo_pseudo()) < 0.05)
+  AnswerTests: entre(0.2, 0.36);usa('estudo_pseudo')
+  Hint: "Digite mean(replicate(1000, estudo_pseudo()) < 0.05)."
+
+- Class: mult_question
+  Output: "Não havia efeito nenhum. Com um teste a 5%, quantos estudos deveriam dar significativo por acaso, e quantos deram?"
+  AnswerChoices: Deveriam ser uns 5%, e deram mais de 25%;Deveriam ser uns 5%, e deram uns 5%;Deveriam ser 0%, e deram 0%
+  CorrectAnswer: Deveriam ser uns 5%, e deram mais de 25%
+  AnswerTests: omnitest(correctVal='Deveriam ser uns 5%, e deram mais de 25%')
+  Hint: "Os 5% são a taxa de falso positivo que o teste promete quando a hipótese nula é verdadeira."
+
+- Class: text
+  Output: "A função estudo_lagoas() usa o mesmo esforço, 20 girinos, com o desenho correto: 10 lagoas por tratamento e um girino de cada. Agora cada réplica é uma lagoa."
+
+- Class: cmd_question
+  Output: "Repita esse estudo 1000 vezes e calcule a proporção de valores-p abaixo de 0,05."
+  CorrectAnswer: mean(replicate(1000, estudo_lagoas()) < 0.05)
+  AnswerTests: entre(0.02, 0.09);usa('estudo_lagoas')
+  Hint: "Digite mean(replicate(1000, estudo_lagoas()) < 0.05)."
+
+- Class: text
+  Output: "Volta para perto dos 5% prometidos. O mesmo número de girinos, o mesmo teste t: o que mudou foi só o desenho. A pseudorréplica não se conserta na análise, porque o problema está em quantas unidades independentes receberam o tratamento."
+
+- Class: text
+  Output: "Resumo. Estratificar, quando se conhecem os grupos, dá estimativas mais precisas com o mesmo esforço. Num estudo observacional, uma confundidora pode fabricar um efeito, e só as que foram medidas podem entrar no modelo. Sortear os tratamentos distribui todas as confundidoras ao acaso. E as réplicas são as unidades que recebem o tratamento de forma independente. Todas essas decisões acontecem no Plano, antes de coletar o primeiro dado. Bom trabalho!"

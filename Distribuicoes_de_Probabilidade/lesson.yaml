@@ -1,0 +1,269 @@
+- Class: meta
+  Course: Introducao a Linguagem R
+  Lesson: Distribuicoes de Probabilidade
+  Author: Diogo B. Provete
+  Type: Standard
+  Organization: UFMS
+  Version: 2.4.5
+
+- Class: text
+  Output: "Bem-vindo(a)! Esta lição acompanha a aula 05 de Bioestatística: probabilidade e distribuições. Você vai usar três distribuições que aparecem o tempo todo em biologia, a binomial, a de Poisson e a normal, e conferir cada conta sorteando dados no R. Leva uns 30 minutos."
+
+- Class: text
+  Output: "Ela supõe que você já fez a lição Primeiros Passos em Bioestatística: sabe criar objetos com <-, usar mean(), sd(), hist() e table()."
+
+- Class: text
+  Output: "No R, cada distribuição tem uma família de quatro funções, que mudam só a primeira letra. d dá a probabilidade de um valor; p dá a probabilidade acumulada até um valor; q faz o caminho inverso, do acumulado para o valor; e r sorteia valores. Para a binomial são dbinom, pbinom, qbinom e rbinom."
+
+- Class: text
+  Output: "BINOMIAL. Você vai a uma lagoa procurar uma espécie de perereca que sabe que vive ali. Suponha que, em cada visita, a chance de detectá-la seja de 30%. Você faz 5 visitas. Quantas vezes vai encontrá-la?"
+
+- Class: text
+  Output: "O número de detecções em 5 visitas segue uma distribuição binomial: n = 5 tentativas independentes, cada uma com probabilidade p = 0,3 de sucesso."
+
+- Class: cmd_question
+  Output: "Calcule a probabilidade de cada resultado possível, de 0 a 5 detecções: dbinom(0:5, size = 5, prob = 0.3)"
+  CorrectAnswer: dbinom(0:5, size = 5, prob = 0.3)
+  AnswerTests: resulta('dbinom(0:5, size = 5, prob = 0.3)')
+  Hint: "Digite dbinom(0:5, size = 5, prob = 0.3). O 0:5 é o vetor 0, 1, 2, 3, 4, 5."
+
+- Class: cmd_question
+  Output: "Guarde essas probabilidades em prob_det e confira que elas somam 1: prob_det <- dbinom(0:5, size = 5, prob = 0.3)"
+  CorrectAnswer: prob_det <- dbinom(0:5, size = 5, prob = 0.3)
+  AnswerTests: vale('prob_det', 'dbinom(0:5, size = 5, prob = 0.3)')
+  Hint: "Digite prob_det <- dbinom(0:5, size = 5, prob = 0.3)."
+
+- Class: cmd_question
+  Output: "Some as probabilidades."
+  CorrectAnswer: sum(prob_det)
+  AnswerTests: resulta('1')
+  Hint: "Digite sum(prob_det)."
+
+- Class: cmd_question
+  Output: "Desenhe a distribuição como um gráfico de barras: barplot(prob_det, names.arg = 0:5)"
+  CorrectAnswer: barplot(prob_det, names.arg = 0:5)
+  AnswerTests: usa('barplot')
+  Hint: "Digite barplot(prob_det, names.arg = 0:5). O names.arg põe os rótulos 0 a 5 embaixo das barras."
+
+- Class: mult_question
+  Output: "Qual é o resultado mais provável?"
+  AnswerChoices: 1 detecção;0 detecções;5 detecções;2 detecções
+  CorrectAnswer: 1 detecção
+  AnswerTests: omnitest(correctVal='1 detecção')
+  Hint: "Procure a barra mais alta. A primeira barra é a de 0 detecções."
+
+- Class: text
+  Output: "Agora a pergunta que importa no campo: a espécie está lá, mas qual a chance de você não a encontrar em nenhuma das 5 visitas e anotar, errado, que ela está ausente?"
+
+- Class: cmd_question
+  Output: "Calcule a probabilidade de 0 detecções."
+  CorrectAnswer: dbinom(0, size = 5, prob = 0.3)
+  AnswerTests: resulta('dbinom(0, size = 5, prob = 0.3)')
+  Hint: "Digite dbinom(0, size = 5, prob = 0.3). Também dá para fazer 0.7^5: não detectar, cinco vezes seguidas."
+
+- Class: text
+  Output: "Quase 17%: em uma de cada seis lagoas onde a espécie vive, ela passaria despercebida. Em ecologia isso se chama falsa ausência, e é por isso que levantamentos de anfíbios repetem visitas."
+
+- Class: cmd_question
+  Output: "A probabilidade de detectar pelo menos uma vez é o complemento: 1 menos a de nenhuma. Calcule 1 - dbinom(0, size = 5, prob = 0.3)"
+  CorrectAnswer: 1 - dbinom(0, size = 5, prob = 0.3)
+  AnswerTests: resulta('1 - dbinom(0, size = 5, prob = 0.3)')
+  Hint: "Digite 1 - dbinom(0, size = 5, prob = 0.3)."
+
+- Class: text
+  Output: "Vamos conferir por simulação. A função rbinom() sorteia resultados da binomial: é como repetir o levantamento de 5 visitas em milhares de lagoas onde a espécie vive."
+
+- Class: cmd_question
+  Output: "Simule 10000 levantamentos de 5 visitas e guarde em deteccoes: deteccoes <- rbinom(10000, size = 5, prob = 0.3)"
+  CorrectAnswer: deteccoes <- rbinom(10000, size = 5, prob = 0.3)
+  AnswerTests: vetor_criado('deteccoes', 10000);usa('rbinom')
+  Hint: "Digite deteccoes <- rbinom(10000, size = 5, prob = 0.3)."
+
+- Class: cmd_question
+  Output: "Que proporção dos levantamentos detectou a espécie pelo menos uma vez? Lembre: a média de TRUE e FALSE é a proporção de TRUE. Digite mean(deteccoes >= 1)"
+  CorrectAnswer: mean(deteccoes >= 1)
+  AnswerTests: entre(0.8, 0.86)
+  Hint: "Digite mean(deteccoes >= 1)."
+
+- Class: mult_question
+  Output: "A simulação bateu com a conta exata de 0,832?"
+  AnswerChoices: Sim, ficou perto de 0,83;Não, ficou perto de 0,5;Não, deu exatamente 1
+  CorrectAnswer: Sim, ficou perto de 0,83
+  AnswerTests: omnitest(correctVal='Sim, ficou perto de 0,83')
+  Hint: "Compare o número que você obteve com 0,832."
+
+- Class: text
+  Output: "Quantas visitas seriam precisas para ter 95% de chance de detectar a espécie, se ela estiver lá? A chance de detectar pelo menos uma vez em k visitas é 1 - 0,7 elevado a k."
+
+- Class: cmd_question
+  Output: "Calcule essa chance para 1 até 12 visitas: 1 - 0.7^(1:12)"
+  CorrectAnswer: 1 - 0.7^(1:12)
+  AnswerTests: resulta('1 - 0.7^(1:12)')
+  Hint: "Digite 1 - 0.7^(1:12). O R calcula as 12 contas de uma vez."
+
+- Class: mult_question
+  Output: "A partir de quantas visitas a chance passa de 0,95?"
+  AnswerChoices: 9;5;3;12
+  CorrectAnswer: 9
+  AnswerTests: omnitest(correctVal='9')
+  Hint: "Conte as posições do vetor até o primeiro valor maior que 0,95. O [1] no início da linha marca a primeira posição."
+
+- Class: text
+  Output: "POISSON. A binomial conta sucessos num número fixo de tentativas. Quando contamos eventos sem um teto definido, como desovas por lagoa ou indivíduos por parcela, o modelo mais simples é a distribuição de Poisson, que tem um parâmetro só: a média, chamada lambda."
+
+- Class: cmd_question
+  Output: "Suponha que as lagoas de uma região tenham, em média, 3 desovas de uma espécie. Qual a probabilidade de uma lagoa não ter nenhuma? dpois(0, lambda = 3)"
+  CorrectAnswer: dpois(0, lambda = 3)
+  AnswerTests: resulta('dpois(0, lambda = 3)')
+  Hint: "Digite dpois(0, lambda = 3)."
+
+- Class: cmd_question
+  Output: "Sorteie as contagens de 1000 lagoas e guarde em desovas: desovas <- rpois(1000, lambda = 3)"
+  CorrectAnswer: desovas <- rpois(1000, lambda = 3)
+  AnswerTests: vetor_criado('desovas', 1000);usa('rpois')
+  Hint: "Digite desovas <- rpois(1000, lambda = 3)."
+
+- Class: cmd_question
+  Output: "Calcule a média das contagens."
+  CorrectAnswer: mean(desovas)
+  AnswerTests: entre(2.7, 3.3)
+  Hint: "Digite mean(desovas)."
+
+- Class: cmd_question
+  Output: "Agora a variância."
+  CorrectAnswer: var(desovas)
+  AnswerTests: entre(2.5, 3.5)
+  Hint: "Digite var(desovas)."
+
+- Class: mult_question
+  Output: "O que você nota comparando a média e a variância?"
+  AnswerChoices: As duas ficam perto de 3, iguais entre si;A variância é muito maior que a média;A variância é zero
+  CorrectAnswer: As duas ficam perto de 3, iguais entre si
+  AnswerTests: omnitest(correctVal='As duas ficam perto de 3, iguais entre si')
+  Hint: "Compare os dois números que o R acabou de mostrar."
+
+- Class: text
+  Output: "Na Poisson, a variância é igual à média. Contagens reais de organismos quase sempre têm variância maior que a média, porque os indivíduos se agregam. Comparar as duas é um primeiro teste rápido para saber se a Poisson serve."
+
+- Class: text
+  Output: "NORMAL. Agora uma variável contínua. Deixei pronto o objeto rhinella, com o CTmax, em graus Celsius, de 47 sapos-cururus. A distribuição normal tem dois parâmetros: a média e o desvio padrão."
+
+- Class: cmd_question
+  Output: "Calcule a média de rhinella e guarde em m."
+  CorrectAnswer: m <- mean(rhinella)
+  AnswerTests: vale('m', 'mean(rhinella)')
+  Hint: "Digite m <- mean(rhinella)."
+
+- Class: cmd_question
+  Output: "Calcule o desvio padrão e guarde em s."
+  CorrectAnswer: s <- sd(rhinella)
+  AnswerTests: vale('s', 'sd(rhinella)')
+  Hint: "Digite s <- sd(rhinella)."
+
+- Class: cmd_question
+  Output: "Faça o histograma em escala de densidade, para poder comparar com a curva: hist(rhinella, freq = FALSE)"
+  CorrectAnswer: hist(rhinella, freq = FALSE)
+  AnswerTests: usa('hist')
+  Hint: "Digite hist(rhinella, freq = FALSE). O freq = FALSE faz a área total das barras valer 1."
+
+- Class: cmd_question
+  Output: "Sobreponha a curva normal com a mesma média e o mesmo desvio padrão: curve(dnorm(x, mean = m, sd = s), add = TRUE)"
+  CorrectAnswer: curve(dnorm(x, mean = m, sd = s), add = TRUE)
+  AnswerTests: usa('curve')
+  Hint: "Digite curve(dnorm(x, mean = m, sd = s), add = TRUE). Aqui o x é obrigatório: é a variável que a curve() percorre."
+
+- Class: mult_question
+  Output: "A curva acompanha o histograma?"
+  AnswerChoices: Razoavelmente, o sino da normal cobre bem as barras;Não, os dados têm dois picos;Não, os dados são todos iguais
+  CorrectAnswer: Razoavelmente, o sino da normal cobre bem as barras
+  AnswerTests: omnitest(correctVal='Razoavelmente, o sino da normal cobre bem as barras')
+  Hint: "Com 47 animais as barras nunca seguem a curva à perfeição. Olhe a forma geral."
+
+- Class: text
+  Output: "Se a normal descreve bem os dados, ela permite calcular probabilidades. A função pnorm() dá a probabilidade acumulada, isto é, de um valor menor ou igual ao que você pedir."
+
+- Class: cmd_question
+  Output: "Segundo a normal, qual a proporção de sapos-cururus com CTmax acima de 40 graus? Calcule 1 - pnorm(40, mean = m, sd = s)"
+  CorrectAnswer: 1 - pnorm(40, mean = m, sd = s)
+  AnswerTests: resulta('1 - pnorm(40, mean = m, sd = s)')
+  Hint: "Digite 1 - pnorm(40, mean = m, sd = s). O pnorm() dá a área à esquerda de 40; o 1 menos ela dá a área à direita."
+
+- Class: cmd_question
+  Output: "Compare com a proporção observada nos dados: mean(rhinella > 40)"
+  CorrectAnswer: mean(rhinella > 40)
+  AnswerTests: resulta('mean(rhinella > 40)')
+  Hint: "Digite mean(rhinella > 40)."
+
+- Class: mult_question
+  Output: "O modelo e os dados concordam?"
+  AnswerChoices: Sim, a normal prevê uns 3,6% e os dados têm uns 4,3%, 2 de 47 animais;Não, a normal prevê 50%;Não, nenhum animal passa de 40 graus
+  CorrectAnswer: Sim, a normal prevê uns 3,6% e os dados têm uns 4,3%, 2 de 47 animais
+  AnswerTests: omnitest(correctVal='Sim, a normal prevê uns 3,6% e os dados têm uns 4,3%, 2 de 47 animais')
+  Hint: "Compare os dois últimos números que o R mostrou."
+
+- Class: text
+  Output: "A função qnorm() faz o caminho inverso: você dá a probabilidade acumulada e ela devolve o valor. É assim que se acha a faixa onde caem os 95% centrais da distribuição."
+
+- Class: cmd_question
+  Output: "Calcule os limites dos 95% centrais: qnorm(c(0.025, 0.975), mean = m, sd = s)"
+  CorrectAnswer: qnorm(c(0.025, 0.975), mean = m, sd = s)
+  AnswerTests: resulta('qnorm(c(0.025, 0.975), mean = m, sd = s)')
+  Hint: "Digite qnorm(c(0.025, 0.975), mean = m, sd = s). Sobram 2,5% em cada cauda."
+
+- Class: text
+  Output: "Esses limites ficam a 1,96 desvio padrão da média, para cada lado. É de onde vem o 1,96 que aparece nos intervalos de confiança."
+
+- Class: cmd_question
+  Output: "Na normal padronizada, com média 0 e desvio padrão 1, calcule a probabilidade de cair a menos de 1 desvio padrão da média: pnorm(1) - pnorm(-1)"
+  CorrectAnswer: pnorm(1) - pnorm(-1)
+  AnswerTests: resulta('pnorm(1) - pnorm(-1)')
+  Hint: "Digite pnorm(1) - pnorm(-1). Sem mean e sd, o R usa média 0 e desvio padrão 1."
+
+- Class: cmd_question
+  Output: "E a menos de 2 desvios padrão?"
+  CorrectAnswer: pnorm(2) - pnorm(-2)
+  AnswerTests: resulta('pnorm(2) - pnorm(-2)')
+  Hint: "Digite pnorm(2) - pnorm(-2)."
+
+- Class: text
+  Output: "Esta é a regra prática da normal: uns 68% dos valores ficam a menos de 1 desvio padrão da média, e uns 95% a menos de 2."
+
+- Class: text
+  Output: "COMO SABER SE OS DADOS SÃO NORMAIS? O histograma ajuda, mas com poucos dados engana. O gráfico quantil-quantil, ou Q-Q, compara os dados com o que uma normal perfeita produziria. Se os dados forem normais, os pontos caem sobre uma reta."
+
+- Class: cmd_question
+  Output: "Faça o gráfico Q-Q dos sapos-cururus: qqnorm(rhinella)"
+  CorrectAnswer: qqnorm(rhinella)
+  AnswerTests: usa('qqnorm')
+  Hint: "Digite qqnorm(rhinella)."
+
+- Class: cmd_question
+  Output: "Acrescente a reta de referência: qqline(rhinella)"
+  CorrectAnswer: qqline(rhinella)
+  AnswerTests: usa('qqline')
+  Hint: "Digite qqline(rhinella). O gráfico do qqnorm() precisa estar aberto."
+
+- Class: cmd_question
+  Output: "Agora o mesmo gráfico com as cinco espécies juntas: qqnorm(anuros$ctmax)"
+  CorrectAnswer: qqnorm(anuros$ctmax)
+  AnswerTests: usa('qqnorm')
+  Hint: "Digite qqnorm(anuros$ctmax)."
+
+- Class: cmd_question
+  Output: "Acrescente a reta."
+  CorrectAnswer: qqline(anuros$ctmax)
+  AnswerTests: usa('qqline')
+  Hint: "Digite qqline(anuros$ctmax)."
+
+- Class: mult_question
+  Output: "Compare os dois gráficos Q-Q. Qual conjunto de dados se afasta da normal?"
+  AnswerChoices: As cinco espécies juntas, cujos pontos fazem uma curva em S longe da reta;Os sapos-cururus, cujos pontos fazem uma curva;Nenhum dos dois
+  CorrectAnswer: As cinco espécies juntas, cujos pontos fazem uma curva em S longe da reta
+  AnswerTests: omnitest(correctVal='As cinco espécies juntas, cujos pontos fazem uma curva em S longe da reta')
+  Hint: "Nos sapos-cururus os pontos seguem a reta, com alguns desvios só nas pontas. Com as cinco espécies, os valores baixos de Dendropsophus minutus entortam o gráfico."
+
+- Class: text
+  Output: "Misturar espécies com médias diferentes produz uma distribuição que não é normal, mesmo que cada espécie, sozinha, seja. Antes de supor uma distribuição, pergunte de que população os dados vêm."
+
+- Class: text
+  Output: "Resumo. A binomial conta sucessos em n tentativas, como detecções em visitas. A Poisson conta eventos sem teto, e tem variância igual à média. A normal descreve muitas medidas contínuas e é definida pela média e pelo desvio padrão. No R, d dá a probabilidade de um valor, p a acumulada, q o valor de um acumulado e r sorteia. Bom trabalho!"

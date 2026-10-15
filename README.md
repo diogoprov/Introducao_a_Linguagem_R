@@ -8,8 +8,9 @@ R dentro do próprio console. Acompanham a disciplina
 o mesmo conjunto de dados das aulas práticas (anuros ao longo de gradientes
 altitudinais na Mata Atlântica; Bovo et al. 2023, *Integrative Organismal
 Biology* 5: obad009). As lições Primeiros Passos em Bioestatística,
-Inferência por Simulação e Testes como Modelos Lineares foram escritas para a
-graduação, acompanhando a disciplina
+Distribuições de Probabilidade, Inferência por Simulação, Testes como Modelos
+Lineares e Amostragem e Delineamento foram escritas para a graduação, nesta
+ordem, acompanhando a disciplina
 [Bioestatística](https://provetelab.org/bioestatistica/) (Ciências
 Biológicas/UFMS); a primeira parte do zero e não pede nenhuma lição da pós.
 
@@ -21,8 +22,10 @@ Biológicas/UFMS); a primeira parte do zero e não pede nenhuma lição da pós.
 | Modelos Lineares | 06 | ciclo PPDAC: desenho amostral, exploração, `lm()`, diagnose com `plot()` e `performance`, interpretação com `anova()` e `broom` |
 | Rudimentos de Programação | 07 | funções, argumento padrão, escopo, `if`/`ifelse`/`for`, `purrr::map` e `map_dbl`, um modelo por espécie com `split()` + `map()` e `broom` |
 | Primeiros Passos em Bioestatística | Bioestatística 03–04 | R como calculadora, objetos com `<-`, vetores; média e mediana (e o efeito de um valor extremo), moda com `table()`; desvios, soma dos quadrados, `var()`, `sd()`, `range()`, `quantile()`, `IQR()`, coeficiente de variação à mão; `na.rm = TRUE`; `hist()` e `boxplot(y ~ grupo)`; `table()` e `prop.table()`, tabela de contingência |
+| Distribuições de Probabilidade | Bioestatística 05 | família `d`/`p`/`q`/`r`; binomial com detecção em visitas repetidas (falsa ausência, visitas necessárias para 95%) conferida com `rbinom()`; Poisson e média = variância; normal com `dnorm()` sobre o histograma, `pnorm()` e `qnorm()` (o 1,96), regra 68–95; `qqnorm()` em uma espécie × cinco espécies misturadas |
 | Inferência por Simulação | Bioestatística 05–07 | população conhecida e `sample()`, distribuição amostral com `replicate()`, Teorema do Limite Central, erro padrão e tamanho da amostra, cobertura do IC de 95% (e como ela falha com n pequeno), valor-p por permutação comparado com `t.test()`, significância estatística × relevância biológica |
 | Testes como Modelos Lineares | Bioestatística 08–11 | `lm(y ~ 1)` é a média; regressão e correlação (`cor.test()` = inclinação padronizada); teste t como `lm()` com x 0/1 (t e p idênticos); ANOVA com `lm()` e `aov()`, F = t² com dois grupos; qui-quadrado como `glm()` de Poisson (Rao = X² de Pearson) |
+| Amostragem e Delineamento | Bioestatística 02 (feita no fim da trilha) | floresta simulada da aula 02: aleatória simples × estratificada (ponderada pela área) × sistemática; confundimento num estudo observacional e a confundidora como covariável em `lm()`; aleatorização dos tratamentos com `sample()`; pseudorréplica e a taxa real de falsos positivos |
 
 ## Para alunos: como fazer
 
